@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "@iconify/tailwind4";
+@plugin "flyonui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+* {
+  @apply uppercase;
+}

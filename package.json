@@ -1,0 +1,40 @@
+{
+  "name": "workout-tracker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "bun run build && wrangler dev --log-level=info --local-protocol=https",
+    "deploy": "bun run build && wrangler deploy",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "format": "biome check --write",
+    "typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.9",
+    "@cloudflare/vite-plugin": "^1.31.0",
+    "@iconify-json/system-uicons": "^1.2.4",
+    "@iconify-json/tabler": "^1.2.33",
+    "@iconify/tailwind4": "^1.2.3",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.12.0",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "express": "^5.2.1",
+    "flyonui": "^2.4.1",
+    "google-auth-library": "^10.6.2",
+    "svelte": "^5.55.0",
+    "svelte-check": "^4.4.5",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.3",
+    "wrangler": "^4.80.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.20"
+  }
+}
