@@ -53,34 +53,24 @@
   class="px-6 py-4 space-y-4"
   onBack={() => (store.currentPage = "home")}
 >
-  <h1 class="font-semibold">
+  <h1 class="font-semibold capitalize! text-center">
     {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
   </h1>
   <div class="flex flex-col gap-2">
     {#each Object.entries(groupByMuscle) as [muscle, exercises]}
-      <div class="flex items-center gap-4">
-        <div
-          class="w-18 h-12 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center px-1"
-        >
-          <span class="truncate">
-            {muscle}
-          </span>
-        </div>
-        <div class="flex gap-2">
+      <div class="flex flex-col gap-1">
+        <div class="divider font-semibold text-primary">{muscle}</div>
+        <div class="flex-1 flex flex-col gap-1 overflow-hidden">
           {#each exercises as exercise}
-            <div class="flex flex-col">
-              <h2 class="font-semibold">{exercise.name}</h2>
-              <p class="text-sm text-gray-500 lowercase!">
-                {exercise.series.length}
-                {exercise.series.length > 1 ? "series" : "serie"}
-              </p>
-            </div>
+            <p class="text-sm truncate">
+              ({exercise.series.length}) {exercise.name}
+            </p>
           {/each}
         </div>
       </div>
     {/each}
   </div>
-  <div class="divider">Select Muscle</div>
+  <div class="divider">Muscle to train</div>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
     {#each muscles as muscle}
       <button

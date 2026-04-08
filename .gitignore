@@ -24,4 +24,4 @@ dist-ssr
 
 # wrangler files
 .wrangler
-.env
+.env*

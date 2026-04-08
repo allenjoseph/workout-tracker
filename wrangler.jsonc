@@ -2,6 +2,7 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "workout-tracker",
   "compatibility_date": "2026-04-03",
+  "compatibility_flags": ["nodejs_compat"],
   "main": "./worker/index.ts",
   "assets": {
     "not_found_handling": "single-page-application",
@@ -22,18 +23,7 @@
     },
   ],
   "secrets": {
-    "required": ["AUTH_SECRET", "AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"],
-  },
-  "compatibility_flags": ["nodejs_compat"],
-  "vars": {
-    "FRONTEND_URL": "https://localhost:5173",
-  },
-  "env": {
-    "production": {
-      "vars": {
-        "FRONTEND_URL": "https://workout.allenjoseph.dev",
-      },
-    },
+    "required": ["FRONTEND_URL", "AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"],
   },
   "observability": {
     "enabled": true,
