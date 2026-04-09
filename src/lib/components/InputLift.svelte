@@ -26,7 +26,7 @@
 <div class="flex gap-4 items-center justify-center">
   <button
     type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl"
+    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
     aria-label="Minus Lift"
     onclick={decrement}
   >
@@ -40,7 +40,7 @@
   </span>
   <button
     type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl"
+    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
     aria-label="More Lift"
     onclick={increment}
   >

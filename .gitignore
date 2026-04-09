@@ -25,3 +25,7 @@ dist-ssr
 # wrangler files
 .wrangler
 .env*
+
+# agents
+.agents
+skills-lock.json

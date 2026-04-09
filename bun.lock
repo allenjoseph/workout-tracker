@@ -10,8 +10,8 @@
       "devDependencies": {
         "@biomejs/biome": "2.4.9",
         "@cloudflare/vite-plugin": "^1.31.0",
-        "@iconify-json/system-uicons": "^1.2.4",
         "@iconify-json/tabler": "^1.2.33",
+        "@iconify-json/twemoji": "^1.2.5",
         "@iconify/tailwind4": "^1.2.3",
         "@sveltejs/vite-plugin-svelte": "^7.0.0",
         "@tailwindcss/vite": "^4.2.2",
@@ -136,9 +136,9 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.11", "", {}, "sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg=="],
 
-    "@iconify-json/system-uicons": ["@iconify-json/system-uicons@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-9WB9dmEm+TRCXI5Ml2IY8zQAPZES8euKxY0VOaf8D6E6ZaEr7ztO6DChMlGg7qWECs3m3FjFUqNgBx8ZpB+djw=="],
-
     "@iconify-json/tabler": ["@iconify-json/tabler@1.2.33", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-q9nUQfE/cjIrGh5bAKHTphitAZpT0kX9SxDgZo3Sx8ofeDTsaHVdRwrn+CfKiJ5vQ1b1btqVwizXzIgz9KEPjA=="],
+
+    "@iconify-json/twemoji": ["@iconify-json/twemoji@1.2.5", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-uKpuIEV0v6K5BW3Mjdyl+XKFVAbbcPxAgifKvEMtZoUZB5+YiY5zaMm2uNNCxyXzAWU9yNLlj41WU6/mvgALsw=="],
 
     "@iconify/tailwind4": ["@iconify/tailwind4@1.2.3", "", { "dependencies": { "@iconify/tools": "^5.0.5", "@iconify/types": "^2.0.0", "@iconify/utils": "^3.1.0" }, "peerDependencies": { "tailwindcss": ">= 4.0.0" } }, "sha512-z8SKiMHRASJKF/IY//87MF88lcB7ulxh8vlhQXXLWsBkNtOh6ese9R41MyGpQeqXdRvQVt+/fX2glQtHFjQ+MA=="],
 

@@ -135,55 +135,57 @@
         </div>
       {/each}
     </div>
-    <div class="card">
-      <div class="card-body gap-6">
-        <h5 class="card-title">{series.length + 1}º Serie</h5>
-        <div class="space-y-4">
-          <h4 class="text-center font-semibold">Repetitions</h4>
-          <InputRep
-            value={serie.reps}
-            onChange={(value) => (serie.reps = value)}
-          />
-        </div>
-        <div class="space-y-4">
-          <h4 class="text-center font-semibold">Lift (Kg)</h4>
-          <InputLift
-            value={serie.lift}
-            onChange={(value) => (serie.lift = value)}
-          />
-        </div>
-        <div class="space-y-4 text-center">
-          <h4 class="text-center font-semibold">Difficulty</h4>
-          <button
-            type="submit"
-            disabled={!selectedExercise || !serie.reps || !serie.lift}
-          >
-            <InputDifficulty
-              value={serie.difficulty}
-              onChange={(value) => (serie.difficulty = value)}
-            />
-          </button>
-        </div>
+    <div class="flex flex-col gap-6">
+      <div class="space-y-4">
+        <h4 class="text-center font-semibold">Repetitions</h4>
+        <InputRep
+          value={serie.reps}
+          onChange={(value) => (serie.reps = value)}
+        />
       </div>
+      <div class="space-y-4">
+        <h4 class="text-center font-semibold">Lift (Kg)</h4>
+        <InputLift
+          value={serie.lift}
+          onChange={(value) => (serie.lift = value)}
+        />
+      </div>
+      <div class="space-y-4">
+        <h4 class="text-center font-semibold">Difficulty</h4>
+        <InputDifficulty
+          value={serie.difficulty}
+          onChange={(value) => (serie.difficulty = value)}
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={!selectedExercise ||
+          !serie.reps ||
+          !serie.lift ||
+          !serie.difficulty}
+        class="btn btn-soft btn-primary dark:btn-success mt-4"
+      >
+        DONE
+      </button>
     </div>
   </form>
   {#if series.length > 0}
-    <div class="divider">series</div>
-    <ul class="list-inside list-decimal marker:text-primary flex-1">
-      {#each series as s}
-        <li class="lowercase!">
-          {s.reps} reps with {s.lift}kg feels {s.difficulty}.
-        </li>
-      {/each}
-    </ul>
-    <div class="flex justify-center">
+    <div class="divider mt-8">series</div>
+    <div class="flex flex-col gap-6">
+      <ul class="list-inside list-decimal marker:text-primary flex-1">
+        {#each series as s}
+          <li>
+            {s.reps} reps with {s.lift}kg feels {s.difficulty}.
+          </li>
+        {/each}
+      </ul>
       <button
         type="button"
-        class="btn btn-success btn-wide"
+        class="btn btn-success"
         aria-label="Complete Exercise"
         onclick={onCompleteExercise}
       >
-        Complete Exercise
+        Complete
       </button>
     </div>
   {/if}
@@ -192,7 +194,7 @@
       class="fixed w-screen h-screen top-0 left-0 bg-black/80 flex flex-col justify-between items-center overflow-hidden"
     >
       <h1 class="text-gray-100 text-2xl z-10 mt-8 rounded-lg text-center">
-        <span class="bg-black/50 px-2 box-decoration-clone">
+        <span class="bg-black/80 px-2 box-decoration-clone">
           {selectedExercise.name}
         </span>
       </h1>
