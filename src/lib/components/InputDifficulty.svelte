@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Difficulty } from "../utils/types";
+  import EmojiDifficulty from "./EmojiDifficulty.svelte";
 
   interface Props {
     value?: Difficulty;
@@ -15,8 +16,8 @@
 
 <div class="flex justify-center gap-4 overflow-x-auto">
   <div class="flex flex-col items-center">
-    <label class="label-text text-base" for="radioDifficultyEasy">
-      <span class="icon-[twemoji--slightly-smiling-face] text-6xl"></span>
+    <label class="label-text text-base text-center" for="radioDifficultyEasy">
+      <EmojiDifficulty level="easy" class="text-6xl" />
       <span class="block text-sm">easy</span>
     </label>
     <input
@@ -29,8 +30,8 @@
     />
   </div>
   <div class="flex flex-col items-center">
-    <label class="label-text text-base" for="radioDifficultyMedium">
-      <span class="icon-[twemoji--neutral-face] text-6xl"></span>
+    <label class="label-text text-base text-center" for="radioDifficultyMedium">
+      <EmojiDifficulty level="medium" class="text-6xl" />
       <span class="block text-sm">medium</span>
     </label>
     <input
@@ -43,8 +44,8 @@
     />
   </div>
   <div class="flex flex-col items-center">
-    <label class="label-text text-base" for="radioDifficultyHard">
-      <span class="icon-[twemoji--sad-but-relieved-face] text-6xl"></span>
+    <label class="label-text text-base text-center" for="radioDifficultyHard">
+      <EmojiDifficulty level="hard" class="text-6xl" />
       <span class="block text-sm">hard</span>
     </label>
     <input

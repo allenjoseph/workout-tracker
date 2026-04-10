@@ -13,6 +13,13 @@
     if (typeof workouts === "string" && workouts.match(/^\{.*\}$/)) {
       store.workouts = JSON.parse(workouts);
     }
+    if (store.user) {
+      fetch("/private/me").then((res) => {
+        if (!res.ok && res.status === 401) {
+          store.saveUser(undefined);
+        }
+      });
+    }
   });
 </script>
 

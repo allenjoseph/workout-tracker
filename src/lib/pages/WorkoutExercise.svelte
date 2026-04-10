@@ -6,6 +6,7 @@
   import InputRep from "../components/InputRep.svelte";
   import Layout from "../components/Layout.svelte";
   import type { Serie } from "../utils/types";
+  import EmojiDifficulty from "../components/EmojiDifficulty.svelte";
 
   let loading = $state(true);
   let exercises = $state<{ name: string; image: string }[]>([]);
@@ -170,12 +171,15 @@
     </div>
   </form>
   {#if series.length > 0}
-    <div class="divider mt-8">series</div>
+    <div class="divider mt-8"><span>{selectedExercise?.name}</span></div>
     <div class="flex flex-col gap-6">
       <ul class="list-inside list-decimal marker:text-primary flex-1">
         {#each series as s}
           <li>
-            {s.reps} reps with {s.lift}kg feels {s.difficulty}.
+            <span class="inline-flex gap-2 items-center">
+              <span>{s.reps} reps with {s.lift}kg</span>
+              <EmojiDifficulty level={s.difficulty} class="text-xl" />
+            </span>
           </li>
         {/each}
       </ul>

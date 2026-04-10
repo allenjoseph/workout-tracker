@@ -75,7 +75,7 @@
     {#each muscles as muscle}
       <button
         type="button"
-        class="card dark:border dark:border-gray-400 image-full min-w-40 min-h-64"
+        class="card dark:border dark:border-gray-400 image-full min-w-36 min-h-64"
         onclick={(event) => onClickMuscle(event, muscle.name)}
       >
         <figure>
@@ -85,7 +85,9 @@
           />
         </figure>
         <div class="card-body px-0">
-          <h2 class="text-2xl font-bold text-center">{muscle.name}</h2>
+          <h2 class="text-2xl font-bold text-center w-32 truncate mx-auto">
+            {muscle.name}
+          </h2>
         </div>
       </button>
     {/each}

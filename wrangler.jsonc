@@ -6,26 +6,26 @@
   "main": "./worker/index.ts",
   "assets": {
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/auth/*", "/private/*"],
+    "run_worker_first": ["/auth/*", "/private/*"]
   },
   "r2_buckets": [
     {
       "binding": "WORKOUT_TRACKER_BUCKET",
       "bucket_name": "workout-tracker",
-      "remote": true,
-    },
+      "remote": true
+    }
   ],
   "kv_namespaces": [
     {
       "binding": "WORKOUT_TRACKER_KV",
       "id": "1ad8473740d74af6990f3dc804a65974",
-      "remote": true,
-    },
+      "remote": true
+    }
   ],
   "secrets": {
-    "required": ["FRONTEND_URL", "AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"],
+    "required": ["FRONTEND_URL", "AUTH_GOOGLE_ID", "AUTH_GOOGLE_SECRET"]
   },
   "observability": {
-    "enabled": true,
-  },
+    "enabled": true
+  }
 }
