@@ -7,5 +7,5 @@
 }
 
 * {
-  @apply uppercase;
+  scrollbar-width: none;
 }

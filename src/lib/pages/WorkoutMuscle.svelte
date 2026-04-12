@@ -1,7 +1,10 @@
 <script lang="ts">
   import dayjs from "dayjs";
+  import { onMount } from "svelte";
   import { store } from "../../store.svelte";
+  import DetailsWorkout from "../components/DetailsWorkout.svelte";
   import Layout from "../components/Layout.svelte";
+  import type { Exercise } from "../utils/types";
 
   const muscles = [
     { name: "abs", image: "elevaciones_del_tronco_en_el_suelo.webp" },
@@ -29,10 +32,9 @@
     { name: "triceps", image: "extensiones_de_triceps_en_polea_alta.webp" },
   ];
 
-  const currentWorkout = $derived(store.workouts[store.currentDate] ?? []);
-  const groupByMuscle = $derived(
-    Object.groupBy(currentWorkout, (exercise) => exercise.muscle),
-  );
+  let loading = $state(false);
+  let exercises = $state<Exercise[]>([]);
+  const groupByMuscle = $derived(Object.groupBy(exercises, (e) => e.muscle));
 
   const onClickMuscle = (e: MouseEvent, muscle: string) => {
     if (!document.startViewTransition) return;
@@ -46,6 +48,20 @@
       store.currentWorkoutMuscle = muscle.toLowerCase();
     });
   };
+
+  const getExercises = async (workoutId: string) => {
+    loading = true;
+    await fetch(`/private/workouts/${workoutId}`)
+      .then((res) => res.json())
+      .then((data) => (exercises = data))
+      .catch(console.log);
+    loading = false;
+  };
+
+  onMount(async () => {
+    if (!store.currentWorkout) return;
+    await getExercises(store.currentWorkout);
+  });
 </script>
 
 <Layout
@@ -57,18 +73,10 @@
     {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
   </h1>
   <div class="flex flex-col gap-2">
-    {#each Object.entries(groupByMuscle) as [muscle, exercises]}
-      <div class="flex flex-col gap-1">
-        <div class="divider font-semibold text-primary">{muscle}</div>
-        <div class="flex-1 flex flex-col gap-1 overflow-hidden">
-          {#each exercises as exercise}
-            <p class="text-sm truncate">
-              ({exercise.series.length}) {exercise.name}
-            </p>
-          {/each}
-        </div>
-      </div>
-    {/each}
+    {#if loading}
+      <span class="loading loading-spinner"></span>
+    {/if}
+    <DetailsWorkout {exercises} />
   </div>
   <div class="divider">Muscle to train</div>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -85,7 +93,9 @@
           />
         </figure>
         <div class="card-body px-0">
-          <h2 class="text-2xl font-bold text-center w-32 truncate mx-auto">
+          <h2
+            class="text-2xl font-bold text-center w-32 truncate mx-auto capitalize"
+          >
             {muscle.name}
           </h2>
         </div>

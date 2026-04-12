@@ -1,58 +1,68 @@
 import { env } from 'cloudflare:workers';
-import { randomBytes } from 'node:crypto';
-import { type Credentials, OAuth2Client } from 'google-auth-library';
+import {
+  auth_GetAuthorizeTokens,
+  auth_GetAuthorizeUrl,
+  auth_GetOauth2Client,
+  auth_GetSessionId,
+  auth_GetSubjectId,
+  auth_RefreshSession,
+} from './lib/auth';
+import {
+  db_AddExercise,
+  db_AddWorkout,
+  db_GetExercises,
+  db_GetWorkouts,
+  type Exercise,
+} from './lib/db';
 
 export default {
   async fetch(req) {
     const url = new URL(req.url);
+    const method = req.method;
 
-    const oauth2Client = new OAuth2Client({
-      client_id: env.AUTH_GOOGLE_ID,
-      client_secret: env.AUTH_GOOGLE_SECRET,
-      redirectUri: `${env.FRONTEND_URL}/auth/callback/google`,
-    });
+    const oauth2Client = auth_GetOauth2Client();
 
     if (url.pathname === '/auth/signin/google') {
-      return Response.redirect(getAuthorizeUrl(oauth2Client));
+      return Response.redirect(auth_GetAuthorizeUrl(oauth2Client));
     }
 
     if (url.pathname === '/auth/callback/google') {
       const headers = new Headers();
       headers.append('Location', env.FRONTEND_URL);
 
-      const sessionId = await storeAuthTokens(oauth2Client, url);
-      if (sessionId) {
+      const tokens = await auth_GetAuthorizeTokens(oauth2Client, url);
+      if (tokens) {
+        const sessionId = crypto.randomUUID();
+        await env.WORKOUT_TRACKER_KV.put(sessionId, JSON.stringify(tokens));
         const cookie = `auth_session=${sessionId}; Path=/; SameSite=Lax; Secure; HttpOnly; SameSite=Lax;`;
         headers.append('Set-Cookie', cookie);
       }
       return new Response(null, { status: 302, headers });
     }
 
-    const sessionTokens = await getSession(req);
-    if (!sessionTokens) {
+    const sessionId = await auth_GetSessionId(req);
+    if (!sessionId) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    oauth2Client.setCredentials(JSON.parse(sessionTokens));
-    const {token: accessToken} = await oauth2Client.getAccessToken();
+    const tokens = await env.WORKOUT_TRACKER_KV.get(sessionId);
+    if (!tokens) {
+      return new Response('Unauthorized', { status: 401 });
+    }
 
-    if (url.pathname === '/private/me') {
+    const accessToken = await auth_RefreshSession(oauth2Client, tokens);
+
+    if (url.pathname === '/private/me' && method === 'GET') {
       return fetch('https://openidconnect.googleapis.com/v1/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
     }
 
-    if (url.pathname.startsWith('/private/exercises/')) {
-      const muscle = url.pathname.substring('/private/exercises/'.length);
-      const { objects } = await listExercisesFromBucket(muscle);
-      return Response.json({ exercises: objects.map((o) => o.key) });
-    }
-
-    if (url.pathname.startsWith('/private/images/')) {
-      const imageKey = url.pathname.substring('/private/images/'.length);
-      const imageValue = await getImageFromBucket(imageKey);
-      if (imageValue) {
-        return new Response(imageValue, {
+    if (url.pathname.startsWith('/private/images/') && method === 'GET') {
+      const objectKey = url.pathname.substring('/private/images/'.length);
+      const objectValue = await env.WORKOUT_TRACKER_BUCKET.get(objectKey);
+      if (objectValue && 'body' in objectValue) {
+        return new Response(objectValue.body, {
           status: 200,
           headers: {
             'Content-Type': 'image/webp',
@@ -62,61 +72,47 @@ export default {
       }
     }
 
+    if (url.pathname.startsWith('/private/exercises/') && method === 'GET') {
+      const prefix = `${url.pathname.substring('/private/exercises/'.length)}/`;
+      const { objects } = await env.WORKOUT_TRACKER_BUCKET.list({ prefix });
+      return Response.json({ exercises: objects.map((o) => o.key) });
+    }
+
+    if (url.pathname === '/private/workouts' && method === 'GET') {
+      const userId = await auth_GetSubjectId(oauth2Client);
+      const result = await db_GetWorkouts(userId);
+      return result.success
+        ? Response.json(result.results)
+        : new Response('Bad Request', { status: 400 });
+    }
+
+    if (url.pathname === '/private/workouts' && method === 'POST') {
+      const uuid = crypto.randomUUID();
+      const userId = await auth_GetSubjectId(oauth2Client);
+      const success = await db_AddWorkout(uuid, userId);
+      return success
+        ? Response.json({ uuid })
+        : new Response('Bad Request', { status: 400 });
+    }
+
+    if (url.pathname.startsWith('/private/workouts/') && method === 'GET') {
+      const workoutId = url.pathname.split('/')[3];
+      if (workoutId) {
+        const result = await db_GetExercises(workoutId);
+        return result.success
+          ? Response.json(result.results)
+          : new Response('Bad Request', { status: 400 });
+      }
+    }
+
+    if (url.pathname === '/private/workouts/exercises' && method === 'POST') {
+      const exercise = await req.json<Exercise>();
+      const success = await db_AddExercise(exercise);
+      return success
+        ? Response.json(exercise)
+        : new Response('Bad Request', { status: 400 });
+    }
+
     return new Response('Not Found', { status: 404 });
   },
 } as ExportedHandler<Env>;
-
-function getAuthorizeUrl(oauth2Client: OAuth2Client) {
-  return oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: 'https://www.googleapis.com/auth/userinfo.profile',
-    include_granted_scopes: true,
-    state: randomBytes(32).toString('hex'),
-  });
-}
-
-async function storeAuthTokens(oauth2Client: OAuth2Client, url: URL) {
-  try {
-    const error = url.searchParams.get('error');
-    const code = url.searchParams.get('code');
-    if (!error && code) {
-      oauth2Client.transporter.defaults = {
-        // Override encoding to prevent gzip response data
-        headers: { 'Accept-Encoding': 'identity' },
-      };
-      const { tokens } = await oauth2Client.getToken(code);
-      return await generateSession(JSON.parse(tokens as string));
-    }
-  } catch (error) {
-    log('Error on oauth2Client.getToken:', error);
-    return null;
-  }
-}
-
-async function generateSession(tokens: Credentials) {
-  const sessionId = crypto.randomUUID();
-  await env.WORKOUT_TRACKER_KV.put(sessionId, JSON.stringify(tokens));
-  return sessionId;
-}
-
-async function getSession(req: Request) {
-  const cookie = req.headers.get('cookie');
-  const sessionId = cookie?.match(/auth_session=([^;]+)/)?.[1];
-  return sessionId && (await env.WORKOUT_TRACKER_KV.get(sessionId));
-}
-
-async function listExercisesFromBucket(muscle: string) {
-  return env.WORKOUT_TRACKER_BUCKET.list({ prefix: `${muscle}/` });
-}
-
-async function getImageFromBucket(imageKey: string) {
-  const objectValue = await env.WORKOUT_TRACKER_BUCKET.get(imageKey);
-
-  if (objectValue && 'body' in objectValue) {
-    return objectValue.body;
-  }
-}
-
-function log(...args: unknown[]) {
-  console.info('[worker:info]', new Date().toISOString(), '-', ...args);
-}

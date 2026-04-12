@@ -1,19 +1,30 @@
-export type Difficulty = 'easy' | 'medium' | 'hard';
+export enum RPE {
+  easy = 1,
+  medium = 5,
+  hard = 8,
+}
 
 export interface Serie {
   reps: number;
-  lift: number;
-  difficulty: Difficulty;
+  weight: number;
+  difficulty: RPE;
 }
 
 export interface Exercise {
-  name: string;
   muscle: string;
-  series: Serie[];
-  timestamp: string;
+  name: string;
+  reps: number;
+  weight: number;
+  rpe: RPE;
+  failure?: boolean;
+  notes?: string;
 }
 
-export type Workout = Record<string, Exercise[]>;
+export interface Workout {
+  uuid: string;
+  timestamp: string;
+  exercises: Exercise[];
+}
 
 export interface User {
   family_name: string;

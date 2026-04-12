@@ -28,6 +28,7 @@
     "express": "^5.2.1",
     "flyonui": "^2.4.1",
     "google-auth-library": "^10.6.2",
+    "jose": "^6.2.2",
     "svelte": "^5.55.0",
     "svelte-check": "^4.4.5",
     "tailwindcss": "^4.2.2",

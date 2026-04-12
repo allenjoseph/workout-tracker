@@ -9,10 +9,6 @@
   const route = $derived(store.currentPage);
 
   onMount(() => {
-    const workouts = localStorage.getItem("workouts");
-    if (typeof workouts === "string" && workouts.match(/^\{.*\}$/)) {
-      store.workouts = JSON.parse(workouts);
-    }
     if (store.user) {
       fetch("/private/me").then((res) => {
         if (!res.ok && res.status === 401) {

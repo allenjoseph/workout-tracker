@@ -1,28 +1,45 @@
 <script lang="ts">
-  import dayjs from "dayjs";
   import { store } from "../../store.svelte";
+  import EmojiDifficulty from "../components/EmojiDifficulty.svelte";
   import InputDifficulty from "../components/InputDifficulty.svelte";
   import InputLift from "../components/InputLift.svelte";
   import InputRep from "../components/InputRep.svelte";
   import Layout from "../components/Layout.svelte";
   import type { Serie } from "../utils/types";
-  import EmojiDifficulty from "../components/EmojiDifficulty.svelte";
 
   let loading = $state(true);
   let exercises = $state<{ name: string; image: string }[]>([]);
   let selectedExercise = $state<{ name: string; image: string }>();
   let zoomInExercise = $state(false);
-  let serie = $state<Serie>({ reps: 15, lift: 20 } as Serie);
+  let serie = $state<Serie>({ reps: 15, weight: 20 } as Serie);
   const series = $state<Serie[]>([]);
 
   const disableExerciseSelector = $derived(
     !!selectedExercise && series.length > 0,
   );
 
-  const onCompleteSerie = (e: Event) => {
+  const onCompleteSerie = async (e: Event) => {
     e.preventDefault();
-    if (!selectedExercise || !serie.lift || !serie.reps || !serie.difficulty)
+    if (
+      !store.currentWorkoutMuscle ||
+      !selectedExercise ||
+      !serie.weight ||
+      !serie.reps ||
+      !serie.difficulty
+    )
       return;
+
+    await fetch("/private/workouts/exercises", {
+      method: "post",
+      body: JSON.stringify({
+        workout: store.currentWorkout,
+        muscle: store.currentWorkoutMuscle,
+        name: selectedExercise.name,
+        reps: serie.reps,
+        weight: serie.weight,
+        rpe: serie.difficulty,
+      }),
+    }).catch(console.log);
 
     series.push({ ...serie } as Serie);
     serie = { ...serie, difficulty: undefined as never };
@@ -32,12 +49,6 @@
     if (!store.currentWorkoutMuscle || !selectedExercise || series.length === 0)
       return;
 
-    store.saveExercise({
-      name: selectedExercise.name,
-      muscle: store.currentWorkoutMuscle,
-      series: [...series],
-      timestamp: dayjs().toISOString(),
-    });
     onBack();
   };
 
@@ -84,91 +95,89 @@
 </script>
 
 <Layout id="workout-exercise" class="px-6 py-4 space-y-4" {onBack}>
-  <form class="flex flex-col gap-4" onsubmit={onCompleteSerie}>
-    <div
-      class="flex gap-2 items-center justify-start h-38 pb-4 overflow-y-hidden snap-x"
-    >
-      {#if loading}
-        <div class="skeleton skeleton-animated size-32"></div>
-        <div class="skeleton skeleton-animated size-32"></div>
-        <div class="skeleton skeleton-animated size-32"></div>
-      {/if}
-      {#each exercises as item}
-        <div
-          class={[
-            "snap-start scroll-ml-2 border-4 outline rounded-lg size-32 flex-shrink-0 overflow-hidden relative m-1 skeleton skeleton-animated",
-            selectedExercise?.name === item.name
-              ? "border-primary dark:border-success outline-primary dark:outline-success"
-              : disableExerciseSelector
-                ? "opacity-30 border-gray-300 outline-gray-300"
-                : "border-transparent outline-gray-300 hover:border-primary dark:hover:border-success",
-          ]}
-        >
-          <button
-            type="button"
-            class="size-full"
-            onclick={() => (selectedExercise = item)}
-            disabled={disableExerciseSelector ||
-              selectedExercise?.name === item.name}
+  <form class="flex flex-col gap-6" onsubmit={onCompleteSerie}>
+    <div>
+      <h4 class="text-center font-semibold">Exercise</h4>
+      <div
+        class="flex gap-2 items-center justify-start h-36 overflow-y-hidden snap-x"
+      >
+        {#if loading}
+          <div class="skeleton skeleton-animated size-32"></div>
+          <div class="skeleton skeleton-animated size-32"></div>
+          <div class="skeleton skeleton-animated size-32"></div>
+        {/if}
+        {#each exercises as item}
+          <div
+            class={[
+              "snap-start scroll-ml-2 border-4 outline rounded-lg size-32 flex-shrink-0 overflow-hidden relative skeleton skeleton-animated",
+              selectedExercise?.name === item.name
+                ? "border-primary dark:border-success outline-primary dark:outline-success"
+                : disableExerciseSelector
+                  ? "opacity-30 border-gray-300 outline-gray-300"
+                  : "border-transparent outline-gray-300 hover:border-primary dark:hover:border-success",
+            ]}
           >
-            <figure>
-              <img
-                id={item.name}
-                src={item.image}
-                alt="Exercise"
-                class={[
-                  "size-32 object-cover",
-                  selectedExercise?.name === item.name && "opacity-60",
-                ]}
-              />
-            </figure>
-          </button>
-          {#if selectedExercise?.name === item.name}
             <button
               type="button"
-              aria-label="zoom"
-              class="absolute inset-0 text-6xl text-primary dark:text-white"
-              onclick={() => onToggleZoom(true, item.name)}
+              class="size-full"
+              onclick={() => (selectedExercise = item)}
+              disabled={disableExerciseSelector ||
+                selectedExercise?.name === item.name}
             >
-              <span class="icon-[tabler--zoom-in-area]"></span>
+              <figure>
+                <img
+                  id={item.name}
+                  src={item.image}
+                  alt="Exercise"
+                  class={[
+                    "size-32 object-cover",
+                    selectedExercise?.name === item.name && "opacity-60",
+                  ]}
+                />
+              </figure>
             </button>
-          {/if}
-        </div>
-      {/each}
+            {#if selectedExercise?.name === item.name}
+              <button
+                type="button"
+                aria-label="zoom"
+                class="absolute inset-0 text-6xl text-primary dark:text-white"
+                onclick={() => onToggleZoom(true, item.name)}
+              >
+                <span class="icon-[tabler--zoom-in-area]"></span>
+              </button>
+            {/if}
+          </div>
+        {/each}
+      </div>
     </div>
-    <div class="flex flex-col gap-6">
-      <div class="space-y-4">
-        <h4 class="text-center font-semibold">Repetitions</h4>
-        <InputRep
-          value={serie.reps}
-          onChange={(value) => (serie.reps = value)}
-        />
-      </div>
-      <div class="space-y-4">
-        <h4 class="text-center font-semibold">Lift (Kg)</h4>
-        <InputLift
-          value={serie.lift}
-          onChange={(value) => (serie.lift = value)}
-        />
-      </div>
-      <div class="space-y-4">
-        <h4 class="text-center font-semibold">Difficulty</h4>
-        <InputDifficulty
-          value={serie.difficulty}
-          onChange={(value) => (serie.difficulty = value)}
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={!selectedExercise ||
-          !serie.reps ||
-          !serie.lift ||
-          !serie.difficulty}
-        class="btn btn-soft btn-primary dark:btn-success mt-4"
-      >
-        DONE
-      </button>
+    <div class="space-y-2">
+      <h4 class="text-center font-semibold">Repetitions</h4>
+      <InputRep value={serie.reps} onChange={(value) => (serie.reps = value)} />
     </div>
+    <div class="space-y-2">
+      <h4 class="text-center font-semibold">Lift (Kg)</h4>
+      <InputLift
+        value={serie.weight}
+        onChange={(value) => (serie.weight = value)}
+      />
+    </div>
+    <div class="space-y-2">
+      <h4 class="text-center font-semibold">Difficulty</h4>
+      <InputDifficulty
+        value={serie.difficulty}
+        onChange={(value) => (serie.difficulty = value)}
+      />
+    </div>
+    <button
+      type="submit"
+      disabled={!selectedExercise ||
+        !serie.reps ||
+        !serie.weight ||
+        !serie.difficulty}
+      class="btn btn-soft btn-primary dark:btn-success mt-4"
+    >
+      DONE
+    </button>
   </form>
   {#if series.length > 0}
     <div class="divider mt-8"><span>{selectedExercise?.name}</span></div>
@@ -177,8 +186,8 @@
         {#each series as s}
           <li>
             <span class="inline-flex gap-2 items-center">
-              <span>{s.reps} reps with {s.lift}kg</span>
               <EmojiDifficulty level={s.difficulty} class="text-xl" />
+              <span>{s.weight}kg x {s.reps}</span>
             </span>
           </li>
         {/each}
