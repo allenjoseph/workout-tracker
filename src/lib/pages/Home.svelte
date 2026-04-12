@@ -6,7 +6,11 @@
   import Layout from "../components/Layout.svelte";
   import type { Workout } from "../utils/types";
 
-  let today = $state(dayjs());
+  const today = $state(dayjs());
+  const week = $derived(
+    Array.from({ length: 5 }).map((_, i) => today.subtract(i, "day")),
+  );
+
   let loading = $state(false);
   let workouts = $state<Workout[]>([]);
 
@@ -42,64 +46,86 @@
   <ul
     class="timeline timeline-snap-icon timeline-compact timeline-vertical w-full"
   >
-    {#each workouts as workout}
-      {@const muscles = Object.groupBy(workout.exercises, (e) => e.muscle)}
-      <span class="text-sm">
-        {dayjs(workout.timestamp).format("dddd, MMMM D, YYYY")}
+    {#each week as day}
+      {@const workout = workouts.find((o) =>
+        dayjs(o.timestamp).isSame(day, "day"),
+      )}
+
+      <span class="text-sm mt-2">
+        {day.format("dddd, MMMM D, YYYY")}
       </span>
-      <li>
-        <div class="timeline-middle">
-          <span class="badge badge-primary size-4.5 rounded-full p-0">
-            <span class="icon-[tabler--check] text-primary-content size-3.5">
+      {#if workout}
+        {@const muscles = Object.groupBy(workout.exercises, (e) => e.muscle)}
+        <li>
+          <div class="timeline-middle">
+            <span class="badge badge-primary size-4.5 rounded-full p-0">
+              <span class="icon-[tabler--check] text-primary-content size-3.5">
+              </span>
             </span>
-          </span>
-        </div>
-        <div class="timeline-end ms-2 m-3 w-full rounded-lg">
-          <div class="flex justify-between">
-            <p class="font-medium">
-              {Object.keys(muscles).length} trained muscles
-            </p>
-            {#if today.isSame(workout.timestamp, "day")}
+          </div>
+          <div class="timeline-end ms-2 m-3 w-full rounded-lg">
+            <div class="flex justify-between">
+              <p class="font-medium">
+                {Object.keys(muscles).length} trained muscles
+              </p>
+              {#if today.isSame(workout.timestamp, "day")}
+                <button
+                  type="button"
+                  class="btn btn-sm btn-success"
+                  onclick={() => goToWorkout(workout.uuid)}
+                >
+                  Continue
+                </button>
+              {:else if today.isBefore(workout.timestamp, "day")}
+                <button
+                  type="button"
+                  class="btn btn-sm btn-neutral"
+                  onclick={() => goToWorkout(workout.uuid)}
+                >
+                  View
+                </button>
+              {/if}
+            </div>
+            <div class="space-y-1">
+              <DetailsWorkout exercises={workout.exercises} />
+            </div>
+          </div>
+          <hr class={[workout ? "bg-primary" : "bg-gray-300"]} />
+        </li>
+      {:else if day.isSame(today, "day")}
+        <li>
+          <div class="timeline-middle">
+            <span
+              class="bg-secondary/20 flex size-4.5 items-center justify-center rounded-full"
+            >
+              <span class="badge badge-secondary size-3 rounded-full p-0">
+              </span>
+            </span>
+          </div>
+          <div class="timeline-end ms-2 m-3 w-full rounded-lg">
+            <div class="flex justify-between">
+              <p class="font-medium">
+                <strong>Zero</strong> trained muscles
+              </p>
               <button
                 type="button"
                 class="btn btn-sm btn-success"
-                onclick={() => goToWorkout(workout.uuid)}
-              >
-                Continue
-              </button>
-            {:else if today.isBefore(workout.timestamp, "day")}
-              <button
-                type="button"
-                class="btn btn-sm btn-neutral"
-                onclick={() => goToWorkout(workout.uuid)}
-              >
-                View
-              </button>
-            {:else}
-              <button
-                type="button"
-                class="btn btn-sm btn-primary"
                 onclick={startWorkout}
                 disabled={loading}
               >
                 {#if loading}
                   <span class="loading loading-spinner"></span>
-                {:else}
-                  Start
                 {/if}
+                Start
               </button>
-            {/if}
+            </div>
           </div>
-          <div class="space-y-1">
-            <DetailsWorkout exercises={workout.exercises} />
-          </div>
-        </div>
-        <hr class="bg-primary" />
-      </li>
+          <hr />
+        </li>
+      {/if}
     {/each}
   </ul>
 </Layout>
 
 <style>
-
 </style>
