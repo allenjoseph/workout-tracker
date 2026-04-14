@@ -19,6 +19,9 @@ export default defineConfig({
         'maskable-icon-512x512.png',
       ],
       manifest: {
+        scope: '/',
+        start_url: '/',
+        display: 'standalone',
         name: 'Workout',
         short_name: 'Workout',
         description: 'Workout tracker',
@@ -46,6 +49,9 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
+      },
+      workbox: {
+        navigateFallbackDenylist: [/^\/auth/],
       },
     }),
   ],
