@@ -8,14 +8,15 @@
   let { onBack }: Props = $props();
 </script>
 
-<nav class="navbar shadow-base-300/20 shadow-sm gap-4">
+<nav class="navbar shadow-base-300/20 shadow-sm">
   <div class="navbar-start items-center">
     <header
-      class="link text-base-content link-neutral text-xl font-bold no-underline"
+      class="link text-base-content link-neutral text-xl font-bold no-underline inline-flex items-center gap-2"
     >
+      <img src="/logo.svg" alt="Logo" class="min-w-6 size-6" />
       Workout
       {#if store.currentWorkoutMuscle}
-        <span class="title">{store.currentWorkoutMuscle}</span>
+        <span class="title capitalize">{store.currentWorkoutMuscle}</span>
       {/if}
     </header>
   </div>
