@@ -104,9 +104,7 @@
           </div>
           <div class="timeline-end ms-2 m-3 w-full rounded-lg">
             <div class="flex justify-between">
-              <p class="font-medium">
-                <strong>Zero</strong> trained muscles
-              </p>
+              <p class="font-medium">0 trained muscles</p>
               <button
                 type="button"
                 class="btn btn-sm btn-success"

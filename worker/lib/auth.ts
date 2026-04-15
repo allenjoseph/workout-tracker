@@ -15,7 +15,6 @@ export function auth_GetOauth2Client() {
 export function auth_GetAuthorizeUrl(oauth2Client: OAuth2Client) {
   return oauth2Client.generateAuthUrl({
     access_type: 'offline',
-    prompt: 'consent',
     scope: 'https://www.googleapis.com/auth/userinfo.profile',
     include_granted_scopes: true,
     state: randomBytes(32).toString('hex'),

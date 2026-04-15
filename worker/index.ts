@@ -52,6 +52,16 @@ export default {
 
     const accessToken = await auth_RefreshSession(oauth2Client, tokens);
 
+    if (url.pathname === '/auth/signout/google') {
+      await oauth2Client.revokeCredentials();
+      await env.WORKOUT_TRACKER_KV.delete(sessionId);
+
+      const headers = new Headers();
+      const cookie = `auth_session=; Path=/; SameSite=Lax; Secure; HttpOnly; SameSite=Lax;`;
+      headers.append('Set-Cookie', cookie);
+      return new Response(null, { status: 204, headers });
+    }
+
     if (url.pathname === '/private/me' && method === 'GET') {
       return fetch('https://openidconnect.googleapis.com/v1/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` },
