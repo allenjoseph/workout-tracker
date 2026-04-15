@@ -14,6 +14,7 @@ import {
   db_GetWorkouts,
   type Exercise,
 } from './lib/db';
+import { sevenDays } from './lib/utils';
 
 export default {
   async fetch(req) {
@@ -34,7 +35,7 @@ export default {
       if (tokens) {
         const sessionId = crypto.randomUUID();
         await env.WORKOUT_TRACKER_KV.put(sessionId, JSON.stringify(tokens));
-        const cookie = `auth_session=${sessionId}; Path=/; SameSite=Lax; Secure; HttpOnly; SameSite=Lax;`;
+        const cookie = `auth_session=${sessionId}; Expires=${sevenDays()}; Path=/; Secure; HttpOnly; SameSite=Lax;`;
         headers.append('Set-Cookie', cookie);
       }
       return new Response(null, { status: 302, headers });
@@ -57,7 +58,7 @@ export default {
       await env.WORKOUT_TRACKER_KV.delete(sessionId);
 
       const headers = new Headers();
-      const cookie = `auth_session=; Path=/; SameSite=Lax; Secure; HttpOnly; SameSite=Lax;`;
+      const cookie = `auth_session=; Path=/; Secure; HttpOnly; SameSite=Lax;`;
       headers.append('Set-Cookie', cookie);
       return new Response(null, { status: 204, headers });
     }
