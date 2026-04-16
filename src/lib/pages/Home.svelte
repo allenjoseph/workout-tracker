@@ -124,6 +124,3 @@
     {/each}
   </ul>
 </Layout>
-
-<style>
-</style>

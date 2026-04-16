@@ -1,25 +1,21 @@
 <script lang="ts">
   interface Props {
     value: number;
-    onChange?: (value: number) => void;
   }
 
-  let { onChange, value = $bindable() }: Props = $props();
+  let { value = $bindable() }: Props = $props();
 
   const increment = () => {
     value = value + 0.25;
-    onChange?.(value);
   };
 
   const decrement = () => {
     value = value - 0.25;
-    onChange?.(value);
   };
 
   const onWheel = (event: WheelEvent) => {
     event.preventDefault();
     value = Math.min(Math.max(value + event.deltaY * 0.25, 0), 100);
-    onChange?.(value);
   };
 </script>
 

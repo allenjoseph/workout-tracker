@@ -4,14 +4,9 @@
 
   interface Props {
     value: RPE;
-    onChange?: (value: RPE) => void;
   }
 
-  let { onChange, value = $bindable() }: Props = $props();
-
-  $effect(() => {
-    onChange?.(value);
-  });
+  let { value = $bindable() }: Props = $props();
 </script>
 
 <div class="flex justify-center gap-4 overflow-x-auto">
