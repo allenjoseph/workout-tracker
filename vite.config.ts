@@ -51,7 +51,19 @@ export default defineConfig({
         ],
       },
       workbox: {
+        cleanupOutdatedCaches: true,
         navigateFallbackDenylist: [/^\/auth/],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) =>
+              url.pathname.match(/\.(png|jpg|jpeg|svg|webp|gif)$/),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
     }),
   ],
