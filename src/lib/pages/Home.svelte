@@ -43,84 +43,63 @@
 </script>
 
 <Layout id="home" class="px-6 py-4">
-  <ul
-    class="timeline timeline-snap-icon timeline-compact timeline-vertical w-full"
-  >
+  <ul class="flex flex-col gap-4 w-full">
     {#each week as day}
       {@const workout = workouts.find((o) =>
         dayjs(o.timestamp).isSame(day, "day"),
       )}
-
-      <span class="text-sm mt-2">
-        {day.format("dddd, MMMM D, YYYY")}
-      </span>
-      {#if workout}
-        {@const muscles = Object.groupBy(workout.exercises, (e) => e.muscle)}
-        <li>
-          <div class="timeline-middle">
+      <li class="flex flex-col">
+        <p>
+          {#if day.isSame(today, "day")}
+            <span class="badge badge-secondary size-4.5 rounded-full p-0">
+              <span class="badge badge-secondary size-3 rounded-full p-0">
+              </span>
+            </span>
+          {:else}
             <span class="badge badge-primary size-4.5 rounded-full p-0">
               <span class="icon-[tabler--check] text-primary-content size-3.5">
               </span>
             </span>
-          </div>
-          <div class="timeline-end ms-2 m-3 w-full rounded-lg">
-            <div class="flex justify-between">
-              <p class="font-medium">
-                {Object.keys(muscles).length} trained muscles
-              </p>
-              {#if today.isSame(workout.timestamp, "day")}
-                <button
-                  type="button"
-                  class="btn btn-sm btn-success"
-                  onclick={() => goToWorkout(workout.uuid)}
-                >
-                  Continue
-                </button>
-              {:else if today.isBefore(workout.timestamp, "day")}
-                <button
-                  type="button"
-                  class="btn btn-sm btn-neutral"
-                  onclick={() => goToWorkout(workout.uuid)}
-                >
-                  View
-                </button>
-              {/if}
-            </div>
-            <div class="space-y-1">
-              <DetailsWorkout exercises={workout.exercises} />
-            </div>
-          </div>
-          <hr class={[workout ? "bg-primary" : "bg-gray-300"]} />
-        </li>
-      {:else if day.isSame(today, "day")}
-        <li>
-          <div class="timeline-middle">
-            <span
-              class="bg-secondary/20 flex size-4.5 items-center justify-center rounded-full"
+          {/if}
+          <span class="text-sm mt-2">
+            {day.format("dddd, MMMM D, YYYY")}
+          </span>
+        </p>
+        {#if workout}
+          {#if today.isSame(workout.timestamp, "day")}
+            <button
+              type="button"
+              class="btn btn-sm btn-success self-end"
+              onclick={() => goToWorkout(workout.uuid)}
             >
-              <span class="badge badge-secondary size-3 rounded-full p-0">
-              </span>
-            </span>
+              Continue
+            </button>
+          {:else if today.isBefore(workout.timestamp, "day")}
+            <button
+              type="button"
+              class="btn btn-sm btn-neutral self-end"
+              onclick={() => goToWorkout(workout.uuid)}
+            >
+              View
+            </button>
+          {/if}
+          <div class="px-6">
+            <DetailsWorkout exercises={workout.exercises} />
           </div>
-          <div class="timeline-end ms-2 m-3 w-full rounded-lg">
-            <div class="flex justify-between">
-              <p class="font-medium">0 trained muscles</p>
-              <button
-                type="button"
-                class="btn btn-sm btn-success"
-                onclick={startWorkout}
-                disabled={loading}
-              >
-                {#if loading}
-                  <span class="loading loading-spinner"></span>
-                {/if}
-                Start
-              </button>
-            </div>
-          </div>
-          <hr />
-        </li>
-      {/if}
+        {:else if day.isSame(today, "day")}
+          <button
+            type="button"
+            class="btn btn-sm btn-success self-end"
+            onclick={startWorkout}
+            disabled={loading}
+          >
+            {#if loading}
+              <span class="loading loading-spinner"></span>
+            {/if}
+            Start
+          </button>
+        {/if}
+      </li>
     {/each}
   </ul>
 </Layout>

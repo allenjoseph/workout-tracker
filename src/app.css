@@ -6,6 +6,10 @@
     dark --prefersdark;
 }
 
+html {
+  font-size: 16px;
+}
+
 * {
   scrollbar-width: none;
 }

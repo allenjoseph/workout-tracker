@@ -34,7 +34,6 @@
 
   let loading = $state(false);
   let exercises = $state<Exercise[]>([]);
-  const groupByMuscle = $derived(Object.groupBy(exercises, (e) => e.muscle));
 
   const onClickMuscle = (e: MouseEvent, muscle: string) => {
     if (!document.startViewTransition) return;

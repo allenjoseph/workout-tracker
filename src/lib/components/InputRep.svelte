@@ -4,18 +4,27 @@
   }
 
   let { value = $bindable() }: Props = $props();
+  let pointerTimer = $state<number>();
 
   const increment = () => {
+    clearInterval(pointerTimer);
     value = value + 1;
   };
 
   const decrement = () => {
+    clearInterval(pointerTimer);
     value = value - 1;
   };
 
-  const onWheel = (event: WheelEvent) => {
-    event.preventDefault();
-    value = Math.min(Math.max(value + event.deltaY, 0), 100);
+  const onPointerDown = (btn: "minus" | "plus") => {
+    pointerTimer = setInterval(() => {
+      if (btn === "minus") value = value - 1;
+      if (btn === "plus") value = value + 1;
+    }, 100);
+  };
+
+  const onPointerUp = () => {
+    clearInterval(pointerTimer);
   };
 </script>
 
@@ -25,13 +34,12 @@
     class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
     aria-label="Minus Reps"
     onclick={decrement}
+    onpointerdown={() => onPointerDown("minus")}
+    onpointerup={onPointerUp}
   >
     <span class="icon-[tabler--minus]"></span>
   </button>
-  <span
-    class="btn btn-primary w-20 h-14 text-center text-4xl"
-    onwheel={onWheel}
-  >
+  <span class="btn btn-primary w-20 h-14 text-center text-4xl">
     {value}
   </span>
   <button
@@ -39,6 +47,8 @@
     class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
     aria-label="More Reps"
     onclick={increment}
+    onpointerdown={() => onPointerDown("plus")}
+    onpointerup={onPointerUp}
   >
     <span class="icon-[tabler--plus]"></span>
   </button>

@@ -5,7 +5,6 @@
   import Layout from "../components/Layout.svelte";
   import type { Exercise } from "../utils/types";
 
-  let selectedExercise = $state<{ name: string; image: string }>();
   const exercises = $state<Exercise[]>([]);
   const groupByName = $derived(Object.groupBy(exercises, (i) => i.name));
 
