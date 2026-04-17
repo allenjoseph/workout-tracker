@@ -43,29 +43,14 @@
 </script>
 
 <Layout id="home" class="px-6 py-4">
-  <ul class="flex flex-col gap-4 w-full">
+  <ul class="flex flex-col w-full">
     {#each week as day}
       {@const workout = workouts.find((o) =>
         dayjs(o.timestamp).isSame(day, "day"),
       )}
       <li class="flex flex-col">
-        <p>
-          {#if day.isSame(today, "day")}
-            <span class="badge badge-secondary size-4.5 rounded-full p-0">
-              <span class="badge badge-secondary size-3 rounded-full p-0">
-              </span>
-            </span>
-          {:else}
-            <span class="badge badge-primary size-4.5 rounded-full p-0">
-              <span
-                class="icon-[boxicons--check] text-primary-content size-3.5"
-              >
-              </span>
-            </span>
-          {/if}
-          <span class="text-sm mt-2">
-            {day.format("dddd, MMMM D, YYYY")}
-          </span>
+        <p class="text-sm mt-2">
+          {day.format("dddd, MMMM D, YYYY")}
         </p>
         {#if workout}
           {#if today.isSame(workout.timestamp, "day")}
@@ -85,7 +70,7 @@
               View
             </button>
           {/if}
-          <div class="px-6">
+          <div class="pl-1.5 pt-1">
             <DetailsWorkout exercises={workout.exercises} />
           </div>
         {:else if day.isSame(today, "day")}
