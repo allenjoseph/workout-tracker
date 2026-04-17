@@ -8,18 +8,18 @@
 
   const increment = () => {
     clearInterval(pointerTimer);
-    value = value + 1;
+    value = Math.min(100, value + 1);
   };
 
   const decrement = () => {
     clearInterval(pointerTimer);
-    value = value - 1;
+    value = Math.max(0, value - 1);
   };
 
   const onPointerDown = (btn: "minus" | "plus") => {
     pointerTimer = setInterval(() => {
-      if (btn === "minus") value = value - 1;
-      if (btn === "plus") value = value + 1;
+      if (btn === "minus") value = Math.max(0, value - 1);
+      if (btn === "plus") value = Math.min(100, value + 1);
     }, 100);
   };
 
