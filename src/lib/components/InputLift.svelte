@@ -37,7 +37,7 @@
     onpointerdown={() => onPointerDown("minus")}
     onpointerup={onPointerUp}
   >
-    <span class="icon-[tabler--minus]"></span>
+    <span class="icon-[boxicons--minus]"></span>
   </button>
   <span class="btn btn-primary w-36 h-14 text-center text-4xl">
     {value.toFixed(2)}
@@ -50,6 +50,6 @@
     onpointerdown={() => onPointerDown("plus")}
     onpointerup={onPointerUp}
   >
-    <span class="icon-[tabler--plus]"></span>
+    <span class="icon-[boxicons--plus]"></span>
   </button>
 </div>

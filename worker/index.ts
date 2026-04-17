@@ -54,7 +54,6 @@ export default {
     const accessToken = await auth_RefreshSession(oauth2Client, tokens);
 
     if (url.pathname === '/auth/signout/google') {
-      await oauth2Client.revokeCredentials();
       await env.WORKOUT_TRACKER_KV.delete(sessionId);
 
       const headers = new Headers();

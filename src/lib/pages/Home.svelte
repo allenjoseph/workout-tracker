@@ -57,7 +57,9 @@
             </span>
           {:else}
             <span class="badge badge-primary size-4.5 rounded-full p-0">
-              <span class="icon-[tabler--check] text-primary-content size-3.5">
+              <span
+                class="icon-[boxicons--check] text-primary-content size-3.5"
+              >
               </span>
             </span>
           {/if}

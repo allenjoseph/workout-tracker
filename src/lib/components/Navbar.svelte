@@ -35,7 +35,7 @@
         onclick={onBack}
         aria-label="Go Back"
       >
-        <span class="icon-[tabler--arrow-left]"></span>
+        <span class="icon-[boxicons--arrow-left-stroke]"></span>
       </button>
     {/if}
     <div class="dropdown relative inline-flex">

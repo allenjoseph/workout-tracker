@@ -71,7 +71,7 @@
                         class="absolute inset-0 text-6xl text-primary dark:text-white"
                         onclick={() => onToggleZoom(true, item.name)}
                     >
-                        <span class="icon-[tabler--zoom-in-area]"></span>
+                        <span class="icon-[boxicons--scan-search]"></span>
                     </button>
                 {/if}
             </div>
@@ -96,11 +96,11 @@
         </figure>
         <button
             type="button"
-            class="inline-flex rounded-full bg-black/50 text-gray-100 text-8xl z-10 mb-8"
+            class="inline-flex rounded-full bg-black/50 text-gray-100 text-6xl z-10 mb-8"
             aria-label="Close"
             onclick={() => onToggleZoom(false, selectedExercise!.name)}
         >
-            <span class="icon-[tabler--playstation-x]"></span>
+            <span class="icon-[boxicons--x-circle]"></span>
         </button>
     </div>
 {/if}
