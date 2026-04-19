@@ -4,7 +4,7 @@
     import type { Exercise } from "../utils/types";
     import InputDifficulty from "./InputDifficulty.svelte";
     import InputExercise from "./InputExercise.svelte";
-    import InputLift from "./InputLift.svelte";
+    import InputWeight from "./InputWeight.svelte";
     import InputRep from "./InputRep.svelte";
 
     const { onSubmit }: { onSubmit: (exercise: Exercise) => void } = $props();
@@ -54,8 +54,8 @@
         <InputRep bind:value={exercise.reps} />
     </div>
     <div class="space-y-2">
-        <h4 class="text-center font-semibold">Lift (Kg)</h4>
-        <InputLift bind:value={exercise.weight} />
+        <h4 class="text-center font-semibold">Weight (Kg)</h4>
+        <InputWeight bind:value={exercise.weight} />
     </div>
     <div class="space-y-2">
         <h4 class="text-center font-semibold">Difficulty</h4>

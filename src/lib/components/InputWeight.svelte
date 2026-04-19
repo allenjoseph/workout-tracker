@@ -7,12 +7,12 @@
 
   const timers = $state<{ inc: number; dec: number }>({ inc: 0, dec: 0 });
 
-  const increment = () => {
-    value = Math.min(100, value + 1);
+  const increment = (delta = 0.25) => {
+    value = Math.min(200, value + delta);
   };
 
-  const decrement = () => {
-    value = Math.max(0, value - 1);
+  const decrement = (delta = 0.25) => {
+    value = Math.max(0, value - delta);
   };
 
   const onPointerDown = (btn: "inc" | "dec") => {
@@ -21,7 +21,7 @@
     timers[btn] = setInterval(() => {
       if (btn === "dec") decrement();
       if (btn === "inc") increment();
-    }, 100);
+    }, 75);
   };
 
   const onPointerUp = (btn: "inc" | "dec") => {
@@ -30,26 +30,42 @@
   };
 </script>
 
-<div class="flex gap-4 items-center justify-center">
+<div class="flex items-center justify-center">
+  <button
+    type="button"
+    class="btn btn-text btn-primary btn-circle text-6xl btn-xl touch-manipulation"
+    aria-label="Minus Weight"
+    onclick={() => decrement(10)}
+  >
+    <span class="icon-[boxicons--chevron-left]"></span>
+  </button>
   <button
     type="button"
     class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="Minus Reps"
+    aria-label="Minus Weight"
     onpointerdown={() => onPointerDown("dec")}
     onpointerup={() => onPointerUp("dec")}
   >
     <span class="icon-[boxicons--minus]"></span>
   </button>
-  <span class="btn btn-primary w-20 h-14 text-center text-4xl">
-    {value}
+  <span class="btn btn-primary w-36 h-14 text-center text-4xl mx-4">
+    {value.toFixed(2)}
   </span>
   <button
     type="button"
     class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="More Reps"
+    aria-label="More Weight"
     onpointerdown={() => onPointerDown("inc")}
     onpointerup={() => onPointerUp("inc")}
   >
     <span class="icon-[boxicons--plus]"></span>
+  </button>
+  <button
+    type="button"
+    class="btn btn-text btn-primary btn-circle text-6xl btn-xl touch-manipulation"
+    aria-label="More Weight"
+    onclick={() => increment(10)}
+  >
+    <span class="icon-[boxicons--chevron-right]"></span>
   </button>
 </div>
