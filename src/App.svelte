@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import SignInWithGoogle from "./lib/components/SignInWithGoogle.svelte";
-  import Home from "./lib/pages/Home.svelte";
-  import WorkoutExercise from "./lib/pages/WorkoutExercise.svelte";
-  import WorkoutMuscle from "./lib/pages/WorkoutMuscle.svelte";
+  import PageExercise from "./exercise/PageExercise.svelte";
+  import PageHome from "./home/PageHome.svelte";
+  import PageLogin from "./home/PageLogin.svelte";
   import { store } from "./store.svelte";
+  import PageWorkout from "./workout/PageWorkout.svelte";
 
   const route = $derived(store.currentPage);
 
@@ -21,13 +21,13 @@
 
 <section>
   {#if !store.user}
-    <SignInWithGoogle />
+    <PageLogin />
   {:else if route === "home"}
-    <Home />
-  {:else if route === "workout-muscle"}
-    <WorkoutMuscle />
-  {:else if route === "workout-exercise"}
-    <WorkoutExercise />
+    <PageHome />
+  {:else if route === "workout"}
+    <PageWorkout />
+  {:else if route === "exercise"}
+    <PageExercise />
   {:else}
     <h1>Not Found</h1>
   {/if}

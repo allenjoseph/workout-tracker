@@ -1,11 +1,11 @@
 <script lang="ts">
+    import { saveExercise } from "../../common/api";
+    import type { Exercise } from "../../common/types";
     import { store } from "../../store.svelte";
-    import { saveExercise } from "../utils/api";
-    import type { Exercise } from "../utils/types";
     import InputDifficulty from "./InputDifficulty.svelte";
     import InputExercise from "./InputExercise.svelte";
-    import InputWeight from "./InputWeight.svelte";
     import InputRep from "./InputRep.svelte";
+    import InputWeight from "./InputWeight.svelte";
 
     const { onSubmit }: { onSubmit: (exercise: Exercise) => void } = $props();
 

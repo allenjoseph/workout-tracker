@@ -1,10 +1,10 @@
 <script lang="ts">
   import dayjs from "dayjs";
   import { onMount } from "svelte";
-  import { store } from "../../store.svelte";
-  import DetailsWorkout from "../components/DetailsWorkout.svelte";
-  import Layout from "../components/Layout.svelte";
-  import type { Workout } from "../utils/types";
+  import Layout from "../common/layout/Layout.svelte";
+  import type { Workout } from "../common/types";
+  import { store } from "../store.svelte";
+  import WorkoutSummary from "../workout/WorkoutSummary.svelte";
 
   const today = $state(dayjs());
   const week = $derived(
@@ -15,7 +15,7 @@
   let workouts = $state<Workout[]>([]);
 
   const goToWorkout = (workoutId: string) => {
-    store.currentPage = "workout-muscle";
+    store.currentPage = "workout";
     store.currentWorkout = workoutId;
   };
 
@@ -71,7 +71,7 @@
             </button>
           {/if}
           <div class="pl-1.5 pt-1">
-            <DetailsWorkout exercises={workout.exercises} />
+            <WorkoutSummary exercises={workout.exercises} />
           </div>
         {:else if day.isSame(today, "day")}
           <button

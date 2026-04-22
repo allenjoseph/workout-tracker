@@ -1,10 +1,10 @@
 <script lang="ts">
   import dayjs from "dayjs";
   import { onMount } from "svelte";
-  import { store } from "../../store.svelte";
-  import DetailsWorkout from "../components/DetailsWorkout.svelte";
-  import Layout from "../components/Layout.svelte";
-  import type { Exercise } from "../utils/types";
+  import Layout from "../common/layout/Layout.svelte";
+  import type { Exercise } from "../common/types";
+  import { store } from "../store.svelte";
+  import WorkoutSummary from "./WorkoutSummary.svelte";
 
   const muscles = [
     { name: "abs", image: "elevaciones_del_tronco_en_el_suelo.webp" },
@@ -39,11 +39,11 @@
     if (!document.startViewTransition) return;
 
     const target = e.target as HTMLElement;
-    target.style.viewTransitionName = "workout-muscle";
+    target.style.viewTransitionName = "workout";
 
     document.startViewTransition(() => {
       target.style.viewTransitionName = "";
-      store.currentPage = "workout-exercise";
+      store.currentPage = "exercise";
       store.currentWorkoutMuscle = muscle.toLowerCase();
     });
   };
@@ -64,7 +64,7 @@
 </script>
 
 <Layout
-  id="workout-muscle"
+  id="workout"
   class="px-6 py-4 space-y-4"
   onBack={() => (store.currentPage = "home")}
 >
@@ -75,7 +75,7 @@
     {#if loading}
       <span class="loading loading-spinner"></span>
     {/if}
-    <DetailsWorkout {exercises} />
+    <WorkoutSummary {exercises} />
   </div>
   <div class="divider">Muscle to train</div>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">

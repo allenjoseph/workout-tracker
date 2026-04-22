@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { HTMLAttributes } from "svelte/elements";
-  import { RPE } from "../utils/types";
+  import { RPE } from "../types";
 
   const {
     level,

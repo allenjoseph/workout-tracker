@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import type { User } from './lib/utils/types';
+import type { User } from './common/types';
 
 interface Store {
   user?: User;
-  currentPage: 'home' | 'workout-muscle' | 'workout-exercise';
+  currentPage: 'home' | 'workout' | 'exercise';
   currentWorkout?: string;
   currentDate: string;
   currentWorkoutMuscle?: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { getExercises } from "../../common/api";
     import { store } from "../../store.svelte";
-    import { getExercises } from "../utils/api";
 
     let { value = $bindable() } = $props();
 

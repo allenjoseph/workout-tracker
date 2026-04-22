@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { RPE } from "../utils/types";
-  import EmojiDifficulty from "./EmojiDifficulty.svelte";
+  import EmojiRpe from "../../common/components/EmojiRpe.svelte";
+  import { RPE } from "../../common/types";
 
   interface Props {
     value: RPE;
@@ -12,7 +12,7 @@
 <div class="flex justify-center gap-4 overflow-x-auto">
   <div class="flex flex-col items-center">
     <label class="label-text text-base text-center" for="radioDifficultyEasy">
-      <EmojiDifficulty level={RPE.easy} class="text-6xl" />
+      <EmojiRpe level={RPE.easy} class="text-6xl" />
       <span class="block text-sm">easy</span>
     </label>
     <input
@@ -26,7 +26,7 @@
   </div>
   <div class="flex flex-col items-center">
     <label class="label-text text-base text-center" for="radioDifficultyMedium">
-      <EmojiDifficulty level={RPE.medium} class="text-6xl" />
+      <EmojiRpe level={RPE.medium} class="text-6xl" />
       <span class="block text-sm">medium</span>
     </label>
     <input
@@ -40,7 +40,7 @@
   </div>
   <div class="flex flex-col items-center">
     <label class="label-text text-base text-center" for="radioDifficultyHard">
-      <EmojiDifficulty level={RPE.hard} class="text-6xl" />
+      <EmojiRpe level={RPE.hard} class="text-6xl" />
       <span class="block text-sm">hard</span>
     </label>
     <input

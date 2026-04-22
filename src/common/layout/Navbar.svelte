@@ -71,7 +71,7 @@
 
 <style>
   .title {
-    view-transition-name: workout-muscle;
+    view-transition-name: workout;
     width: fit-content;
   }
 </style>

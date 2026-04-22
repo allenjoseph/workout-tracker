@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { store } from "../../store.svelte";
+  import { store } from "../store.svelte";
 
   let loading = $state(true);
 
