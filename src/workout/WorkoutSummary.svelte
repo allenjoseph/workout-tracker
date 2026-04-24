@@ -1,9 +1,9 @@
 <script lang="ts">
   import EmojiRpe from "../common/components/EmojiRpe.svelte";
-  import type { Exercise } from "../common/types";
+  import type { Training } from "../common/types";
   import WorkoutExercises from "./WorkoutExercises.svelte";
 
-  const { exercises }: { exercises: Exercise[] } = $props();
+  const { exercises }: { exercises: Training[] } = $props();
 
   const muscles = $derived(Object.groupBy(exercises, (e) => e.muscle));
 </script>
@@ -14,6 +14,6 @@
     <div class="divider divider-start capitalize text-lg">
       {muscle}
     </div>
-    <WorkoutExercises {exercises} />
+    <WorkoutExercises training={exercises} />
   </div>
 {/each}

@@ -9,6 +9,16 @@ CREATE TABLE IF NOT EXISTS Workout (
 DROP TABLE IF EXISTS Exercise;
 CREATE TABLE IF NOT EXISTS Exercise (
     id INTEGER PRIMARY KEY,
+    uuid TEXT,
+    muscle TEXT,
+    name TEXT,
+    image TEXT,
+    timestamp NUMERIC
+);
+
+DROP TABLE IF EXISTS Training;
+CREATE TABLE IF NOT EXISTS Training (
+    id INTEGER PRIMARY KEY,
     workout TEXT, -- Workout UUID
     muscle TEXT,
     name TEXT,

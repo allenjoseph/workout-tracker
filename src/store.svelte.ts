@@ -3,7 +3,7 @@ import type { User } from './common/types';
 
 interface Store {
   user?: User;
-  currentPage: 'home' | 'workout' | 'exercise';
+  currentPage: 'home' | 'workout' | 'training';
   currentWorkout?: string;
   currentDate: string;
   currentWorkoutMuscle?: string;

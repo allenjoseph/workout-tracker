@@ -2,7 +2,7 @@
   import dayjs from "dayjs";
   import { onMount } from "svelte";
   import Layout from "../common/layout/Layout.svelte";
-  import type { Exercise } from "../common/types";
+  import type { Training } from "../common/types";
   import { store } from "../store.svelte";
   import WorkoutSummary from "./WorkoutSummary.svelte";
 
@@ -33,7 +33,7 @@
   ];
 
   let loading = $state(false);
-  let exercises = $state<Exercise[]>([]);
+  let exercises = $state<Training[]>([]);
 
   const onClickMuscle = (e: MouseEvent, muscle: string) => {
     if (!document.startViewTransition) return;
@@ -43,7 +43,7 @@
 
     document.startViewTransition(() => {
       target.style.viewTransitionName = "";
-      store.currentPage = "exercise";
+      store.currentPage = "training";
       store.currentWorkoutMuscle = muscle.toLowerCase();
     });
   };

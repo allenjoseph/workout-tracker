@@ -11,6 +11,14 @@ export interface Serie {
 }
 
 export interface Exercise {
+  uuid?: string;
+  muscle: string;
+  name: string;
+  image?: number;
+  timestamp?: string;
+}
+
+export interface Training {
   muscle: string;
   name: string;
   reps: number;
@@ -23,7 +31,7 @@ export interface Exercise {
 export interface Workout {
   uuid: string;
   timestamp: string;
-  exercises: Exercise[];
+  exercises: Training[];
 }
 
 export interface User {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import PageExercise from "./exercise/PageExercise.svelte";
+  import PageTraining from "./training/PageTraining.svelte";
   import PageHome from "./home/PageHome.svelte";
   import PageLogin from "./home/PageLogin.svelte";
   import { store } from "./store.svelte";
@@ -26,8 +26,8 @@
     <PageHome />
   {:else if route === "workout"}
     <PageWorkout />
-  {:else if route === "exercise"}
-    <PageExercise />
+  {:else if route === "training"}
+    <PageTraining />
   {:else}
     <h1>Not Found</h1>
   {/if}

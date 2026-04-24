@@ -9,10 +9,12 @@ import {
 } from './lib/auth';
 import {
   db_AddExercise,
+  db_AddTraining,
   db_AddWorkout,
-  db_GetExercises,
+  db_GetWorkoutTraining,
   db_GetWorkouts,
   type Exercise,
+  type Training,
 } from './lib/db';
 import { sevenDays } from './lib/utils';
 
@@ -88,6 +90,16 @@ export default {
       return Response.json({ exercises: objects.map((o) => o.key) });
     }
 
+    if (url.pathname === '/private/exercises' && method === 'POST') {
+      const exercise = await req.json<Exercise>();
+      exercise.uuid = crypto.randomUUID();
+      exercise.image = null;
+      const success = await db_AddExercise(exercise);
+      return success
+        ? Response.json(exercise)
+        : new Response('Bad Request', { status: 400 });
+    }
+
     if (url.pathname === '/private/workouts' && method === 'GET') {
       const userId = await auth_GetSubjectId(oauth2Client);
       const result = await db_GetWorkouts(userId);
@@ -108,18 +120,18 @@ export default {
     if (url.pathname.startsWith('/private/workouts/') && method === 'GET') {
       const workoutId = url.pathname.split('/')[3];
       if (workoutId) {
-        const result = await db_GetExercises(workoutId);
+        const result = await db_GetWorkoutTraining(workoutId);
         return result.success
           ? Response.json(result.results)
           : new Response('Bad Request', { status: 400 });
       }
     }
 
-    if (url.pathname === '/private/workouts/exercises' && method === 'POST') {
-      const exercise = await req.json<Exercise>();
-      const success = await db_AddExercise(exercise);
+    if (url.pathname === '/private/workouts/training' && method === 'POST') {
+      const training = await req.json<Training>();
+      const success = await db_AddTraining(training);
       return success
-        ? Response.json(exercise)
+        ? Response.json(training)
         : new Response('Bad Request', { status: 400 });
     }
 

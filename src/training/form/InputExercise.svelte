@@ -29,7 +29,7 @@
 </script>
 
 <div
-    class="flex gap-2 items-center justify-start h-36 overflow-y-hidden snap-x"
+    class="flex gap-2 items-center justify-start h-36 overflow-y-hidden snap-x px-1"
 >
     {#await getExercises(store.currentWorkoutMuscle)}
         <div class="skeleton skeleton-animated size-32"></div>

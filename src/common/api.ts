@@ -1,4 +1,4 @@
-import type { Exercise } from './types';
+import type { Exercise, Training } from './types';
 
 export async function getExercises(muscle?: string) {
   if (!muscle) return [];
@@ -20,16 +20,27 @@ export async function getExercises(muscle?: string) {
     });
 }
 
-export async function saveExercise(workoutId: string, exercise: Exercise) {
-  await fetch('/private/workouts/exercises', {
+export async function saveTraining(workoutId: string, training: Training) {
+  await fetch('/private/workouts/training', {
     method: 'post',
     body: JSON.stringify({
       workout: workoutId,
+      muscle: training.muscle,
+      name: training.name,
+      reps: training.reps,
+      weight: training.weight,
+      rpe: training.rpe,
+    }),
+  }).catch(console.log);
+}
+
+export async function saveExercise(exercise: Exercise) {
+  await fetch('/private/exercises', {
+    method: 'post',
+    body: JSON.stringify({
       muscle: exercise.muscle,
       name: exercise.name,
-      reps: exercise.reps,
-      weight: exercise.weight,
-      rpe: exercise.rpe,
+      image: exercise.image,
     }),
   }).catch(console.log);
 }

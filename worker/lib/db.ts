@@ -1,6 +1,13 @@
 import { env } from 'cloudflare:workers';
 
 export interface Exercise {
+  uuid: string;
+  muscle: string;
+  name: string;
+  image: string | null;
+}
+
+export interface Training {
   workout: string;
   muscle: string;
   name: string;
@@ -27,7 +34,7 @@ export async function db_GetWorkouts(userId: string) {
     `'rpe', e.rpe, 'failure', e.failure,`,
     `'notes', e.notes)) as exercises`,
     `FROM Workout w`,
-    `INNER JOIN Exercise e on e.workout = w.uuid`,
+    `INNER JOIN Training e on e.workout = w.uuid`,
     `WHERE w.userId = ?`,
     `GROUP BY w.uuid`,
     `ORDER BY w.timestamp DESC`,
@@ -41,26 +48,41 @@ export async function db_GetWorkouts(userId: string) {
 
 export async function db_AddExercise(exercise: Exercise) {
   const sql =
-    'INSERT INTO Exercise (workout,muscle,name,reps,weight,rpe,failure,notes,timestamp) VALUES (?,?,?,?,?,?,?,?,?)';
+    'INSERT INTO Exercise (uuid,muscle,name,image,timestamp) VALUES (?,?,?,?,?)';
   const result = await env.WORKOUT_TRACKER_DB.prepare(sql)
     .bind(
-      exercise.workout,
+      exercise.uuid,
       exercise.muscle,
       exercise.name,
-      exercise.reps,
-      exercise.weight,
-      exercise.rpe,
-      exercise.failure ?? 0,
-      exercise.notes ?? null,
+      exercise.image,
       Date.now(),
     )
     .run();
   return result.success;
 }
 
-export async function db_GetExercises(workoutId: string) {
+export async function db_AddTraining(training: Training) {
   const sql =
-    'SELECT muscle, name, reps, weight, rpe, failure, notes FROM Exercise WHERE workout = ? ORDER BY timestamp DESC';
+    'INSERT INTO Training (workout,muscle,name,reps,weight,rpe,failure,notes,timestamp) VALUES (?,?,?,?,?,?,?,?,?)';
+  const result = await env.WORKOUT_TRACKER_DB.prepare(sql)
+    .bind(
+      training.workout,
+      training.muscle,
+      training.name,
+      training.reps,
+      training.weight,
+      training.rpe,
+      training.failure ?? 0,
+      training.notes ?? null,
+      Date.now(),
+    )
+    .run();
+  return result.success;
+}
+
+export async function db_GetWorkoutTraining(workoutId: string) {
+  const sql =
+    'SELECT muscle, name, reps, weight, rpe, failure, notes FROM Training WHERE workout = ? ORDER BY timestamp DESC';
   const result = await env.WORKOUT_TRACKER_DB.prepare(sql)
     .bind(workoutId)
     .run();
