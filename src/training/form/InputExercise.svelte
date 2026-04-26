@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getExercises } from "../../common/api";
+    import { getExercisesFromImages } from "../../common/api";
     import { store } from "../../store.svelte";
 
     let { value = $bindable() } = $props();
@@ -31,7 +31,7 @@
 <div
     class="flex gap-2 items-center justify-start h-36 overflow-y-hidden snap-x px-1"
 >
-    {#await getExercises(store.currentWorkoutMuscle)}
+    {#await getExercisesFromImages(store.currentWorkoutMuscle)}
         <div class="skeleton skeleton-animated size-32"></div>
         <div class="skeleton skeleton-animated size-32"></div>
         <div class="skeleton skeleton-animated size-32"></div>
@@ -40,7 +40,7 @@
             <div
                 class={[
                     "snap-start scroll-ml-2 border-4 outline rounded-lg size-32 flex-shrink-0 overflow-hidden relative skeleton skeleton-animated",
-                    selectedExercise?.name === item.name
+                    value === item.name
                         ? "border-primary dark:border-success outline-primary dark:outline-success"
                         : "border-transparent outline-gray-300 hover:border-primary dark:hover:border-success",
                 ]}
@@ -49,7 +49,7 @@
                     type="button"
                     class="size-full"
                     onclick={() => onSelectHandler(item)}
-                    disabled={selectedExercise?.name === item.name}
+                    disabled={value === item.name}
                 >
                     <figure>
                         <img
@@ -58,13 +58,12 @@
                             alt="Exercise"
                             class={[
                                 "size-32 object-cover",
-                                selectedExercise?.name === item.name &&
-                                    "opacity-60",
+                                value === item.name && "opacity-60",
                             ]}
                         />
                     </figure>
                 </button>
-                {#if selectedExercise?.name === item.name}
+                {#if value === item.name}
                     <button
                         type="button"
                         aria-label="zoom"

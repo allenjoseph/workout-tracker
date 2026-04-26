@@ -6,6 +6,7 @@
     import InputExercise from "./InputExercise.svelte";
     import InputRep from "./InputRep.svelte";
     import InputWeight from "./InputWeight.svelte";
+    import ListOtherExercises from "./ListOtherExercises.svelte";
     import NewExercise from "./NewExercise.svelte";
 
     const { onSubmit }: { onSubmit: (training: Training) => void } = $props();
@@ -52,7 +53,7 @@
                 onclick={() => (openNewExercise = !openNewExercise)}
             >
                 <span class="icon-[boxicons--plus]"></span>
-                New
+                Other
             </button>
             {#if openNewExercise}
                 <NewExercise
@@ -62,6 +63,10 @@
             {/if}
         </div>
         <InputExercise bind:value={training.name} />
+        <ListOtherExercises
+            muscle={store.currentWorkoutMuscle!}
+            bind:value={training.name}
+        />
     </div>
     <div class="space-y-2">
         <h4 class="text-center font-semibold">Repetitions</h4>

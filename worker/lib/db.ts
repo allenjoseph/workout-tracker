@@ -38,6 +38,7 @@ export async function db_GetWorkouts(userId: string) {
     `WHERE w.userId = ?`,
     `GROUP BY w.uuid`,
     `ORDER BY w.timestamp DESC`,
+    `LIMIT 10`,
   ].join(' ');
   const result = await env.WORKOUT_TRACKER_DB.prepare(sql).bind(userId).run();
   result.results.forEach((o) => {
@@ -59,6 +60,17 @@ export async function db_AddExercise(exercise: Exercise) {
     )
     .run();
   return result.success;
+}
+
+export async function db_GetExercises(muscle: string) {
+  const sql = [
+    `SELECT e.uuid, e.name, e.image`,
+    `FROM Exercise e`,
+    `WHERE e.muscle = ?`,
+    `ORDER BY e.timestamp DESC`,
+  ].join(' ');
+  const result = await env.WORKOUT_TRACKER_DB.prepare(sql).bind(muscle).run();
+  return result;
 }
 
 export async function db_AddTraining(training: Training) {

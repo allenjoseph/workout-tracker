@@ -48,7 +48,7 @@
     });
   };
 
-  const getExercises = async (workoutId: string) => {
+  const getWorkout = async (workoutId: string) => {
     loading = true;
     await fetch(`/private/workouts/${workoutId}`)
       .then((res) => res.json())
@@ -59,7 +59,7 @@
 
   onMount(async () => {
     if (!store.currentWorkout) return;
-    await getExercises(store.currentWorkout);
+    await getWorkout(store.currentWorkout);
   });
 </script>
 
@@ -68,7 +68,7 @@
   class="px-6 py-4 space-y-4"
   onBack={() => (store.currentPage = "home")}
 >
-  <h1 class="font-semibold capitalize! text-center">
+  <h1 class="font-semibold capitalize!">
     {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
   </h1>
   <div class="flex flex-col gap-2">
@@ -82,13 +82,14 @@
     {#each muscles as muscle}
       <button
         type="button"
-        class="card dark:border dark:border-gray-400 image-full min-w-36 min-h-64"
+        class="card dark:border dark:border-gray-400 image-full min-w-36 max-h-20 overflow-y-hidden"
         onclick={(event) => onClickMuscle(event, muscle.name)}
       >
         <figure>
           <img
             src={`/private/images/${muscle.name}/${muscle.image}`}
             alt="Muscle"
+            class="min-h-64 bg-cover bg-center"
           />
         </figure>
         <div class="card-body px-0">

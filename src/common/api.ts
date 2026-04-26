@@ -1,6 +1,6 @@
 import type { Exercise, Training } from './types';
 
-export async function getExercises(muscle?: string) {
+export async function getExercisesFromImages(muscle?: string) {
   if (!muscle) return [];
 
   return fetch(`/private/exercises/${muscle}`)
@@ -43,4 +43,10 @@ export async function saveExercise(exercise: Exercise) {
       image: exercise.image,
     }),
   }).catch(console.log);
+}
+
+export async function getExercises(muscle: string) {
+  return fetch(`/private/exercises?muscle=${muscle}`).then<Exercise[]>((res) =>
+    res.json(),
+  );
 }

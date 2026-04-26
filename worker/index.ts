@@ -11,8 +11,9 @@ import {
   db_AddExercise,
   db_AddTraining,
   db_AddWorkout,
-  db_GetWorkoutTraining,
+  db_GetExercises,
   db_GetWorkouts,
+  db_GetWorkoutTraining,
   type Exercise,
   type Training,
 } from './lib/db';
@@ -88,6 +89,14 @@ export default {
       const prefix = `${url.pathname.substring('/private/exercises/'.length)}/`;
       const { objects } = await env.WORKOUT_TRACKER_BUCKET.list({ prefix });
       return Response.json({ exercises: objects.map((o) => o.key) });
+    }
+
+    if (url.pathname === '/private/exercises' && method === 'GET') {
+      const muscle = url.searchParams.get('muscle') as string;
+      const result = await db_GetExercises(muscle);
+      return result.success
+        ? Response.json(result.results)
+        : new Response('Bad Request', { status: 400 });
     }
 
     if (url.pathname === '/private/exercises' && method === 'POST') {

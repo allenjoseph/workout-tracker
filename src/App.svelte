@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import PageTraining from "./training/PageTraining.svelte";
   import PageHome from "./home/PageHome.svelte";
   import PageLogin from "./home/PageLogin.svelte";
   import { store } from "./store.svelte";
+  import PageTraining from "./training/PageTraining.svelte";
   import PageWorkout from "./workout/PageWorkout.svelte";
 
   const route = $derived(store.currentPage);

@@ -51,8 +51,8 @@
         <div
             class="absolute top-0 size-[stretch] flex items-center justify-center z-30 bg-base-100/80"
         >
-            <span class="loading loading-spinner loading-lg text-primary"
-            ></span>
+            <span class="loading loading-spinner loading-lg text-primary">
+            </span>
         </div>
     {/if}
 </div>

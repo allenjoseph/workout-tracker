@@ -8,7 +8,7 @@
 
   const today = $state(dayjs());
   const week = $derived(
-    Array.from({ length: 5 }).map((_, i) => today.subtract(i, "day")),
+    Array.from({ length: 14 }).map((_, i) => today.subtract(i, "day")),
   );
 
   let loading = $state(false);
@@ -42,17 +42,18 @@
   });
 </script>
 
-<Layout id="home" class="px-6 py-4">
+<Layout id="home" class="py-4">
   <ul class="flex flex-col w-full">
     {#each week as day}
       {@const workout = workouts.find((o) =>
         dayjs(o.timestamp).isSame(day, "day"),
       )}
-      <li class="flex flex-col">
+      <li class="flex flex-col border-b border-base-content/20 pt-1 pb-3 px-4">
         <p class="text-sm mt-2">
           {day.format("dddd, MMMM D, YYYY")}
         </p>
         {#if workout}
+          <WorkoutSummary exercises={workout.exercises} />
           {#if today.isSame(workout.timestamp, "day")}
             <button
               type="button"
@@ -70,9 +71,6 @@
               View
             </button>
           {/if}
-          <div class="pl-1.5 pt-1">
-            <WorkoutSummary exercises={workout.exercises} />
-          </div>
         {:else if day.isSame(today, "day")}
           <button
             type="button"
