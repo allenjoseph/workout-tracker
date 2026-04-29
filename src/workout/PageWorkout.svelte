@@ -75,7 +75,7 @@
     {#if loading}
       <span class="loading loading-spinner"></span>
     {/if}
-    <WorkoutSummary {exercises} />
+    <WorkoutSummary {exercises} deletable />
   </div>
   <div class="divider">Muscle to train</div>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">

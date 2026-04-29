@@ -13,11 +13,8 @@
   <span class={["icon-[twemoji--slightly-smiling-face]", classValue]} {...rest}>
   </span>
 {:else if level === RPE.medium}
-  <span class={["icon-[twemoji--grinning-face]", classValue]} {...rest}></span>
+  <span class={["icon-[twemoji--neutral-face]", classValue]} {...rest}></span>
 {:else if level === RPE.hard}
-  <span
-    class={["icon-[twemoji--face-holding-back-tears]", classValue]}
-    {...rest}
-  >
+  <span class={["icon-[twemoji--confounded-face]", classValue]} {...rest}>
   </span>
 {/if}

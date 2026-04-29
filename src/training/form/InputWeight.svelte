@@ -33,7 +33,7 @@
 <div class="flex items-center justify-center">
   <button
     type="button"
-    class="btn btn-text btn-primary btn-circle text-6xl btn-xl touch-manipulation"
+    class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
     aria-label="Minus Weight"
     onclick={() => decrement(10)}
   >
@@ -48,7 +48,7 @@
   >
     <span class="icon-[boxicons--minus]"></span>
   </button>
-  <span class="btn btn-primary w-36 h-14 text-center text-4xl mx-4">
+  <span class="btn btn-primary w-32 h-14 text-center text-4xl">
     {value.toFixed(2)}
   </span>
   <button
@@ -62,7 +62,7 @@
   </button>
   <button
     type="button"
-    class="btn btn-text btn-primary btn-circle text-6xl btn-xl touch-manipulation"
+    class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
     aria-label="More Weight"
     onclick={() => increment(10)}
   >

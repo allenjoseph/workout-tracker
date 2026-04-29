@@ -138,9 +138,9 @@ export default {
 
     if (url.pathname === '/private/workouts/training' && method === 'POST') {
       const training = await req.json<Training>();
-      const success = await db_AddTraining(training);
-      return success
-        ? Response.json(training)
+      const result = await db_AddTraining(training);
+      return result.success
+        ? Response.json({ ...training, id: result.meta.last_row_id })
         : new Response('Bad Request', { status: 400 });
     }
 

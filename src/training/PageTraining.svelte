@@ -24,8 +24,8 @@
   <FormTraining onSubmit={(item) => training.push(item)} />
 
   <div class="flex flex-col gap-4">
-    {#each Object.entries(groupByName) as [name, exercises]}
-      <WorkoutExercises training={exercises} />
+    {#each Object.values(groupByName) as exercises}
+      <WorkoutExercises training={exercises} deletable />
     {/each}
     <button
       type="button"

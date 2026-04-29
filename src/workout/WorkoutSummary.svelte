@@ -2,16 +2,23 @@
   import type { Training } from "../common/types";
   import WorkoutExercises from "./WorkoutExercises.svelte";
 
-  const { exercises }: { exercises: Training[] } = $props();
+  interface Props {
+    exercises: Training[];
+    deletable?: boolean;
+  }
+
+  const { exercises, deletable = false }: Props = $props();
 
   const muscles = $derived(Object.groupBy(exercises, (e) => e.muscle));
 </script>
 
-{#each Object.entries(muscles) as [muscle, exercises] (muscle)}
-  <div class="pt-3">
-    <p class="uppercase text-sm font-semibold">
-      {muscle}
-    </p>
-    <WorkoutExercises training={exercises} />
-  </div>
-{/each}
+<div class="space-y-3 py-2">
+  {#each Object.entries(muscles) as [muscle, training] (muscle)}
+    <div>
+      <p class="uppercase text-sm font-semibold">
+        {muscle}
+      </p>
+      <WorkoutExercises {training} {deletable} />
+    </div>
+  {/each}
+</div>

@@ -19,6 +19,7 @@ export interface Exercise {
 }
 
 export interface Training {
+  id?: number;
   muscle: string;
   name: string;
   reps: number;

@@ -30,7 +30,7 @@
   };
 </script>
 
-<div class="flex gap-4 items-center justify-center">
+<div class="flex items-center justify-center">
   <button
     type="button"
     class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
@@ -40,7 +40,7 @@
   >
     <span class="icon-[boxicons--minus]"></span>
   </button>
-  <span class="btn btn-primary w-20 h-14 text-center text-4xl">
+  <span class="btn btn-primary w-20 h-14 mx-6 text-center text-4xl">
     {value}
   </span>
   <button

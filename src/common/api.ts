@@ -21,7 +21,7 @@ export async function getExercisesFromImages(muscle?: string) {
 }
 
 export async function saveTraining(workoutId: string, training: Training) {
-  await fetch('/private/workouts/training', {
+  return fetch('/private/workouts/training', {
     method: 'post',
     body: JSON.stringify({
       workout: workoutId,
@@ -31,7 +31,7 @@ export async function saveTraining(workoutId: string, training: Training) {
       weight: training.weight,
       rpe: training.rpe,
     }),
-  }).catch(console.log);
+  }).then<Training>((res) => res.json());
 }
 
 export async function saveExercise(exercise: Exercise) {

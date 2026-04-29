@@ -29,7 +29,7 @@ export async function db_AddWorkout(uuid: string, userId: string) {
 export async function db_GetWorkouts(userId: string) {
   const sql = [
     `SELECT w.uuid, w.timestamp, json_group_array(`,
-    `json_object('muscle', e.muscle, 'name', e.name,`,
+    `json_object('id', e.id, 'muscle', e.muscle, 'name', e.name,`,
     `'reps', e.reps, 'weight', e.weight,`,
     `'rpe', e.rpe, 'failure', e.failure,`,
     `'notes', e.notes)) as exercises`,
@@ -89,12 +89,12 @@ export async function db_AddTraining(training: Training) {
       Date.now(),
     )
     .run();
-  return result.success;
+  return result;
 }
 
 export async function db_GetWorkoutTraining(workoutId: string) {
   const sql =
-    'SELECT muscle, name, reps, weight, rpe, failure, notes FROM Training WHERE workout = ? ORDER BY timestamp DESC';
+    'SELECT id, muscle, name, reps, weight, rpe, failure, notes FROM Training WHERE workout = ? ORDER BY timestamp DESC';
   const result = await env.WORKOUT_TRACKER_DB.prepare(sql)
     .bind(workoutId)
     .run();
