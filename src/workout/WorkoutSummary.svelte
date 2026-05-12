@@ -12,13 +12,15 @@
   const muscles = $derived(Object.groupBy(exercises, (e) => e.muscle));
 </script>
 
-<div class="space-y-3 py-2">
-  {#each Object.entries(muscles) as [muscle, training] (muscle)}
-    <div>
-      <p class="uppercase text-sm font-semibold">
-        {muscle}
-      </p>
-      <WorkoutExercises {training} {deletable} />
-    </div>
-  {/each}
-</div>
+{#if exercises.length > 0}
+  <div class="space-y-3 py-2">
+    {#each Object.entries(muscles) as [muscle, training] (muscle)}
+      <div>
+        <p class="uppercase text-sm font-semibold">
+          {muscle}
+        </p>
+        <WorkoutExercises {training} {deletable} />
+      </div>
+    {/each}
+  </div>
+{/if}

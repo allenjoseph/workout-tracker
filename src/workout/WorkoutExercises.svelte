@@ -1,5 +1,6 @@
 <script lang="ts">
   import EmojiRpe from "../common/components/EmojiRpe.svelte";
+  import Modal from "../common/components/Modal.svelte";
   import type { Training } from "../common/types";
 
   interface Props {
@@ -13,12 +14,29 @@
 
   let itemSelected = $state<Training>();
 
+  let showDeleteModal = $state(false);
+
   const onSelectItem = (item: Training) => {
     if (item.id === itemSelected?.id) {
-      itemSelected = undefined;
+      showDeleteModal = true;
     } else {
       itemSelected = item;
     }
+  };
+
+  const onDeleteItem = () => {
+    if (itemSelected?.id) {
+      training.splice(
+        training.findIndex((e) => e.id === itemSelected?.id),
+        1,
+      );
+      itemSelected = undefined;
+    }
+  };
+
+  const onCancelDelete = () => {
+    showDeleteModal = false;
+    itemSelected = undefined;
   };
 
   $inspect(training);
@@ -63,4 +81,10 @@
       </ul>
     </div>
   {/each}
+
+  {#if showDeleteModal}
+    <Modal onAccept={onDeleteItem} onCancel={onCancelDelete}>
+      <p>Are you sure to delete this exercise?</p>
+    </Modal>
+  {/if}
 </div>

@@ -20,7 +20,7 @@
   };
 </script>
 
-<Layout id="training" class="px-6 py-4 space-y-4" {onBack}>
+<Layout id="training" class="p-4 space-y-4" {onBack}>
   <FormTraining onSubmit={(item) => training.push(item)} />
 
   <div class="flex flex-col gap-4">

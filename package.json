@@ -10,7 +10,8 @@
     "deploy": "vite build && wrangler deploy",
     "deploy:secrets": "wrangler secret bulk .env",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "format": "biome check --write",
+    "biome:check": "biome check --write",
+    "biome:format": "biome format --write",
     "typegen": "wrangler types"
   },
   "devDependencies": {

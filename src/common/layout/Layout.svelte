@@ -9,7 +9,7 @@
   const { children, onBack, ...rest }: Props = $props();
 </script>
 
-<main class="bg-base-100 min-h-screen">
+<main class="min-h-screen">
   <Navbar {onBack} />
   <section {...rest}>
     {@render children?.()}

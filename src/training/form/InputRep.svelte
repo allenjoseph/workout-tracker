@@ -30,26 +30,28 @@
   };
 </script>
 
-<div class="flex items-center justify-center">
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="Minus Reps"
-    onpointerdown={() => onPointerDown("dec")}
-    onpointerup={() => onPointerUp("dec")}
-  >
-    <span class="icon-[boxicons--minus]"></span>
-  </button>
-  <span class="btn btn-primary w-20 h-14 mx-6 text-center text-4xl">
-    {value}
-  </span>
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="More Reps"
-    onpointerdown={() => onPointerDown("inc")}
-    onpointerup={() => onPointerUp("inc")}
-  >
-    <span class="icon-[boxicons--plus]"></span>
-  </button>
+<div class="card py-6">
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
+      aria-label="Minus Reps"
+      onpointerdown={() => onPointerDown("dec")}
+      onpointerup={() => onPointerUp("dec")}
+    >
+      <span class="icon-[boxicons--minus]"></span>
+    </button>
+    <span class="btn btn-primary w-20 h-14 mx-6 text-center text-4xl">
+      {value}
+    </span>
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
+      aria-label="More Reps"
+      onpointerdown={() => onPointerDown("inc")}
+      onpointerup={() => onPointerUp("inc")}
+    >
+      <span class="icon-[boxicons--plus]"></span>
+    </button>
+  </div>
 </div>

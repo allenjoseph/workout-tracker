@@ -15,7 +15,7 @@
   };
 </script>
 
-<nav class="navbar shadow-base-300/20 shadow-sm">
+<nav class="navbar bg-transparent">
   <div class="navbar-start items-center">
     <header
       class="link text-base-content link-neutral text-xl font-bold no-underline inline-flex items-center gap-2"

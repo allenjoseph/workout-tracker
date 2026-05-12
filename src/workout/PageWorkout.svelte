@@ -65,19 +65,23 @@
 
 <Layout
   id="workout"
-  class="px-6 py-4 space-y-4"
+  class="p-4 space-y-4"
   onBack={() => (store.currentPage = "home")}
 >
-  <h1 class="font-semibold capitalize!">
-    {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
-  </h1>
-  <div class="flex flex-col gap-2">
-    {#if loading}
-      <span class="loading loading-spinner"></span>
-    {/if}
-    <WorkoutSummary {exercises} deletable />
+  <div class="card px-4 py-2">
+    <h1 class="font-semibold capitalize! mb-2">
+      {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
+    </h1>
+    <div class="flex flex-col">
+      {#if loading}
+        <span class="loading loading-spinner"></span>
+      {:else if !exercises?.length}
+        <span>No muscles have been trained yet.</span>
+      {/if}
+      <WorkoutSummary {exercises} deletable />
+    </div>
   </div>
-  <div class="divider">Muscle to train</div>
+  <h3 class="font-semibold">Select a muscle to train</h3>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
     {#each muscles as muscle}
       <button

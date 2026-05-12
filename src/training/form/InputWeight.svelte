@@ -30,42 +30,44 @@
   };
 </script>
 
-<div class="flex items-center justify-center">
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
-    aria-label="Minus Weight"
-    onclick={() => decrement(10)}
-  >
-    <span class="icon-[boxicons--chevron-left]"></span>
-  </button>
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="Minus Weight"
-    onpointerdown={() => onPointerDown("dec")}
-    onpointerup={() => onPointerUp("dec")}
-  >
-    <span class="icon-[boxicons--minus]"></span>
-  </button>
-  <span class="btn btn-primary w-32 h-14 text-center text-4xl">
-    {value.toFixed(2)}
-  </span>
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
-    aria-label="More Weight"
-    onpointerdown={() => onPointerDown("inc")}
-    onpointerup={() => onPointerUp("inc")}
-  >
-    <span class="icon-[boxicons--plus]"></span>
-  </button>
-  <button
-    type="button"
-    class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
-    aria-label="More Weight"
-    onclick={() => increment(10)}
-  >
-    <span class="icon-[boxicons--chevron-right]"></span>
-  </button>
+<div class="card py-6">
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
+      aria-label="Minus Weight"
+      onclick={() => decrement(10)}
+    >
+      <span class="icon-[boxicons--chevron-left]"></span>
+    </button>
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
+      aria-label="Minus Weight"
+      onpointerdown={() => onPointerDown("dec")}
+      onpointerup={() => onPointerUp("dec")}
+    >
+      <span class="icon-[boxicons--minus]"></span>
+    </button>
+    <span class="btn btn-primary w-32 h-14 text-center text-4xl">
+      {value.toFixed(2)}
+    </span>
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-4xl btn-xl touch-manipulation"
+      aria-label="More Weight"
+      onpointerdown={() => onPointerDown("inc")}
+      onpointerup={() => onPointerUp("inc")}
+    >
+      <span class="icon-[boxicons--plus]"></span>
+    </button>
+    <button
+      type="button"
+      class="btn btn-text btn-primary btn-circle text-5xl btn-xl touch-manipulation"
+      aria-label="More Weight"
+      onclick={() => increment(10)}
+    >
+      <span class="icon-[boxicons--chevron-right]"></span>
+    </button>
+  </div>
 </div>

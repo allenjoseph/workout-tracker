@@ -37,54 +37,87 @@
     loading = false;
   };
 
+  const toggleCollapse = () => {};
+
   onMount(async () => {
     await getWorkouts();
   });
 </script>
 
-<Layout id="home" class="py-4">
-  <ul class="flex flex-col w-full">
-    {#each week as day}
-      {@const workout = workouts.find((o) =>
-        dayjs(o.timestamp).isSame(day, "day"),
-      )}
-      <li class="flex flex-col border-b border-base-content/20 pt-1 pb-3 px-4">
-        <p class="text-sm mt-2">
-          {day.format("dddd, MMMM D, YYYY")}
-        </p>
-        {#if workout}
-          <WorkoutSummary exercises={workout.exercises} />
-          {#if today.isSame(workout.timestamp, "day")}
+<Layout id="home" class="p-4">
+  <div class="card">
+    <ul class="flex flex-col w-full">
+      {#each week as day}
+        {@const workout = workouts.find((o) =>
+          dayjs(o.timestamp).isSame(day, "day"),
+        )}
+        <li class="flex flex-col not-last:border-b border-base-content/20 p-4">
+          <div class="flex items-center justify-between gap-2">
+            <span
+              class="text-success flex items-center justify-center rounded-full"
+            >
+              {#if workout}
+                <span
+                  class="icon-[boxicons--check-circle-filled] size-7 rtl:rotate-180"
+                >
+                </span>
+              {:else}
+                <span
+                  class="icon-[boxicons--circle-dashed] size-7 rtl:rotate-180"
+                >
+                </span>
+              {/if}
+            </span>
+            <span class="flex-1">
+              {day.format("dddd, MMMM D, YYYY")}
+            </span>
+            {#if workout}
+              <button
+                type="button"
+                onclick={toggleCollapse}
+                aria-label="collapse"
+              >
+                <span
+                  class="icon-[boxicons--chevron-down] size-7 rtl:rotate-180"
+                >
+                </span>
+              </button>
+            {/if}
+          </div>
+          {#if workout}
+            <WorkoutSummary exercises={workout.exercises} />
+            {#if today.isSame(workout.timestamp, "day")}
+              <button
+                type="button"
+                class="btn btn-sm btn-success self-end"
+                onclick={() => goToWorkout(workout.uuid)}
+              >
+                Continue
+              </button>
+            {:else if today.isBefore(workout.timestamp, "day")}
+              <button
+                type="button"
+                class="btn btn-sm btn-neutral self-end"
+                onclick={() => goToWorkout(workout.uuid)}
+              >
+                View
+              </button>
+            {/if}
+          {:else if day.isSame(today, "day")}
             <button
               type="button"
               class="btn btn-sm btn-success self-end"
-              onclick={() => goToWorkout(workout.uuid)}
+              onclick={startWorkout}
+              disabled={loading}
             >
-              Continue
-            </button>
-          {:else if today.isBefore(workout.timestamp, "day")}
-            <button
-              type="button"
-              class="btn btn-sm btn-neutral self-end"
-              onclick={() => goToWorkout(workout.uuid)}
-            >
-              View
+              {#if loading}
+                <span class="loading loading-spinner"></span>
+              {/if}
+              Start
             </button>
           {/if}
-        {:else if day.isSame(today, "day")}
-          <button
-            type="button"
-            class="btn btn-sm btn-success self-end"
-            onclick={startWorkout}
-            disabled={loading}
-          >
-            {#if loading}
-              <span class="loading loading-spinner"></span>
-            {/if}
-            Start
-          </button>
-        {/if}
-      </li>
-    {/each}
-  </ul>
+        </li>
+      {/each}
+    </ul>
+  </div>
 </Layout>

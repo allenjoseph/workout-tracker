@@ -44,9 +44,9 @@
   };
 </script>
 
-<form class="flex flex-col gap-6" onsubmit={onSubmitHandler}>
+<form class="flex flex-col gap-4" onsubmit={onSubmitHandler}>
   <div class="relative">
-    <h4 class="text-center font-semibold">Exercise</h4>
+    <h3 class="font-semibold">Exercise:</h3>
     <div
       class="absolute right-0 top-0 z-10 w-full flex flex-col items-end gap-1"
     >
@@ -56,12 +56,12 @@
         onclick={() => (openNewExercise = !openNewExercise)}
       >
         <span class="icon-[boxicons--plus]"></span>
-        Other
+        New
       </button>
       {#if openNewExercise}
         <NewExercise
           muscle={store.currentWorkoutMuscle!}
-          onSave={() => (openNewExercise = false)}
+          onClose={() => (openNewExercise = false)}
         />
       {/if}
     </div>
@@ -72,21 +72,21 @@
     />
   </div>
   <div class="space-y-2">
-    <h4 class="text-center font-semibold">Weight (Kg)</h4>
+    <h3 class="font-semibold">Weight (Kg):</h3>
     <InputWeight bind:value={training.weight} />
   </div>
   <div class="space-y-2">
-    <h4 class="text-center font-semibold">Repetitions</h4>
+    <h3 class="font-semibold">Repetitions:</h3>
     <InputRep bind:value={training.reps} />
   </div>
   <div class="space-y-2">
-    <h4 class="text-center font-semibold">Difficulty</h4>
+    <h3 class="font-semibold">Difficulty:</h3>
     <InputDifficulty bind:value={training.rpe} />
   </div>
   <button
     type="submit"
     disabled={invalid}
-    class="btn btn-soft btn-primary dark:btn-success mt-4"
+    class="btn btn-soft btn-primary dark:btn-success"
   >
     DONE
   </button>
