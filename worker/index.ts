@@ -11,6 +11,7 @@ import {
   db_AddExercise,
   db_AddTraining,
   db_AddWorkout,
+  db_DeleteTraining,
   db_GetExercises,
   db_GetWorkouts,
   db_GetWorkoutTraining,
@@ -142,6 +143,16 @@ export default {
       return result.success
         ? Response.json({ ...training, id: result.meta.last_row_id })
         : new Response('Bad Request', { status: 400 });
+    }
+
+    if (url.pathname.startsWith('/private/workouts/training/') && method === 'DELETE') {
+      const trainingId = url.pathname.split('/').at(-1);
+      if (trainingId) {
+        const result = await db_DeleteTraining(trainingId);
+        return result.success
+          ? new Response(null, { status: 204 })
+          : new Response('Bad Request', { status: 400 });
+      }
     }
 
     return new Response('Not Found', { status: 404 });

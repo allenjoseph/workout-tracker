@@ -1,111 +1,124 @@
 <script lang="ts">
-    import { getExercisesFromImages } from "../../common/api";
-    import { store } from "../../store.svelte";
+  import { getExercisesFromImages } from "../../common/api";
+  import { store } from "../../store.svelte";
 
-    let { value = $bindable() } = $props();
+  let { value = $bindable() } = $props();
 
-    let selectedExercise = $state<{ name: string; image: string }>();
-    let zoomImage = $state(false);
+  let zoomImage = $state(false);
+  let selectedImage = $state<{ name: string; image: string }>();
 
-    const onSelectHandler = (item: { name: string; image: string }) => {
-        selectedExercise = item;
-        value = item.name;
-    };
+  const onToggleZoom = (
+    zoom: boolean,
+    item: { name: string; image: string },
+  ) => {
+    if (!document.startViewTransition) return;
 
-    const onToggleZoom = (zoom: boolean, targetId: string) => {
-        if (!document.startViewTransition) return;
+    const target = document.getElementById(item.name);
+    if (!target) return;
 
-        const target = document.getElementById(targetId);
-        if (!target) return;
-
-        if (zoom) {
-            target.style.viewTransitionName = "exercise-image-fullscreen";
-        }
-        document.startViewTransition(() => {
-            target.style.viewTransitionName = "";
-            zoomImage = zoom;
-        });
-    };
+    if (zoom) {
+      selectedImage = item;
+      target.style.viewTransitionName = "exercise-image-fullscreen";
+    }
+    document.startViewTransition(() => {
+      target.style.viewTransitionName = "";
+      zoomImage = zoom;
+    });
+  };
 </script>
 
-<div
-    class="flex gap-2 items-center justify-start h-36 overflow-y-hidden snap-x px-1"
->
-    {#await getExercisesFromImages(store.currentWorkoutMuscle)}
-        <div class="skeleton skeleton-animated size-32"></div>
-        <div class="skeleton skeleton-animated size-32"></div>
-        <div class="skeleton skeleton-animated size-32"></div>
-    {:then exercises}
-        {#each exercises as item}
-            <div
-                class={[
-                    "snap-start scroll-ml-2 border-4 outline rounded-lg size-32 flex-shrink-0 overflow-hidden relative skeleton skeleton-animated",
-                    value === item.name
-                        ? "border-primary dark:border-success outline-primary dark:outline-success"
-                        : "border-transparent outline-gray-300 hover:border-primary dark:hover:border-success",
-                ]}
-            >
-                <button
-                    type="button"
-                    class="size-full"
-                    onclick={() => onSelectHandler(item)}
-                    disabled={value === item.name}
-                >
-                    <figure>
-                        <img
-                            id={item.name}
-                            src={item.image}
-                            alt="Exercise"
-                            class={[
-                                "size-32 object-cover",
-                                value === item.name && "opacity-60",
-                            ]}
-                        />
-                    </figure>
-                </button>
-                {#if value === item.name}
-                    <button
-                        type="button"
-                        aria-label="zoom"
-                        class="absolute inset-0 text-6xl text-primary dark:text-white"
-                        onclick={() => onToggleZoom(true, item.name)}
-                    >
-                        <span class="icon-[boxicons--scan-search]"></span>
-                    </button>
-                {/if}
-            </div>
-        {/each}
-    {/await}
-</div>
-{#if selectedExercise && zoomImage}
-    <div
-        class="fixed w-screen h-screen top-0 left-0 bg-black/80 flex flex-col justify-between items-center overflow-hidden z-50"
-    >
-        <h1 class="text-gray-100 text-2xl z-10 mt-8 rounded-lg text-center">
-            <span class="bg-black/80 px-2 box-decoration-clone">
-                {selectedExercise.name}
-            </span>
-        </h1>
-        <figure class="absolute">
-            <img
-                src={selectedExercise.image}
-                alt="Exercise Zoomed"
-                class="exercise-image-fullscreen w-screen h-screen object-contain"
-            />
-        </figure>
-        <button
-            type="button"
-            class="inline-flex rounded-full bg-black/50 text-gray-100 text-6xl z-10 mb-8"
-            aria-label="Close"
-            onclick={() => onToggleZoom(false, selectedExercise!.name)}
+<div class="card">
+  {#await getExercisesFromImages(store.currentWorkoutMuscle)}
+    {@render skeleton()}
+  {:then exercises}
+    <ul>
+      {#each exercises as item}
+        <li
+          class="not-last:border-b border-base-content/20 flex items-center gap-1 px-3 py-1"
         >
-            <span class="icon-[boxicons--x-circle]"></span>
-        </button>
-    </div>
-{/if}
+          <label class="flex-1 flex items-center gap-3">
+            <input
+              type="radio"
+              name="otherExercise"
+              class="radio radio-primary"
+              value={item.name}
+              bind:group={value}
+            />
+            <span class="label-text text-base">
+              {item.name}
+            </span>
+          </label>
+          <button
+            type="button"
+            class="border border-base-content/20 m-1 rounded"
+            onclick={() => onToggleZoom(true, item)}
+          >
+            <figure>
+              <img
+                id={item.name}
+                src={item.image}
+                alt="Exercise"
+                class="size-12 object-cover"
+              />
+            </figure>
+          </button>
+        </li>
+      {/each}
+    </ul>
+  {/await}
+</div>
+
+<div
+  class="fixed w-screen h-screen top-0 left-0 bg-black/80 flex flex-col justify-between items-center overflow-hidden z-50"
+  hidden={!zoomImage || !selectedImage}
+>
+  <h1 class="text-gray-100 text-2xl z-10 mt-8 rounded-lg text-center">
+    <span class="bg-black/80 px-2 box-decoration-clone">
+      {selectedImage?.name}
+    </span>
+  </h1>
+  <figure class="absolute">
+    <img
+      src={selectedImage?.image}
+      alt="Exercise Zoomed"
+      class="exercise-image-fullscreen w-screen h-screen object-contain"
+    />
+  </figure>
+  <button
+    type="button"
+    class="inline-flex rounded-full bg-black/50 text-gray-100 text-6xl z-10 mb-8"
+    aria-label="Close"
+    onclick={() => onToggleZoom(false, selectedImage!)}
+  >
+    <span class="icon-[boxicons--x-circle]"></span>
+  </button>
+</div>
+
+{#snippet skeleton()}
+  <ul>
+    <li
+      class="not-last:border-b border-base-content/20 flex items-center gap-4 px-4 py-2"
+    >
+      <div class="skeleton skeleton-animated h-6 flex-1"></div>
+      <div class="skeleton skeleton-animated size-12"></div>
+    </li>
+    <li
+      class="not-last:border-b border-base-content/20 flex items-center gap-4 px-4 py-2"
+    >
+      <div class="skeleton skeleton-animated h-6 flex-1"></div>
+      <div class="skeleton skeleton-animated size-12"></div>
+    </li>
+    <li
+      class="not-last:border-b border-base-content/20 flex items-center gap-4 px-4 py-2"
+    >
+      <div class="skeleton skeleton-animated h-6 flex-1"></div>
+      <div class="skeleton skeleton-animated size-12"></div>
+    </li>
+  </ul>
+{/snippet}
 
 <style>
-    .exercise-image-fullscreen {
-        view-transition-name: exercise-image-fullscreen;
-    }
+  .exercise-image-fullscreen {
+    view-transition-name: exercise-image-fullscreen;
+  }
 </style>

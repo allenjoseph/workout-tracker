@@ -50,3 +50,9 @@ export async function getExercises(muscle: string) {
     res.json(),
   );
 }
+
+export async function deleteTraining(trainingId: number) {
+  return fetch(`/private/workouts/training/${trainingId}`, {
+    method: 'delete',
+  }).then((res) => res.ok);
+}

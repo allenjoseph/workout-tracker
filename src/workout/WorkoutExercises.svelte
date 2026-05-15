@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { deleteTraining } from "../common/api";
   import EmojiRpe from "../common/components/EmojiRpe.svelte";
   import Modal from "../common/components/Modal.svelte";
   import type { Training } from "../common/types";
@@ -8,13 +9,13 @@
     deletable?: boolean;
   }
 
-  const { training = [], deletable = false }: Props = $props();
+  let { training = [], deletable = false }: Props = $props();
 
   const groupByExercise = $derived(Object.groupBy(training, (e) => e.name));
 
   let itemSelected = $state<Training>();
-
   let showDeleteModal = $state(false);
+  let deleteLoading = $state(false);
 
   const onSelectItem = (item: Training) => {
     if (item.id === itemSelected?.id) {
@@ -26,20 +27,22 @@
 
   const onDeleteItem = () => {
     if (itemSelected?.id) {
-      training.splice(
-        training.findIndex((e) => e.id === itemSelected?.id),
-        1,
-      );
-      itemSelected = undefined;
+      deleteLoading = true;
+      deleteTraining(itemSelected.id)
+        .then(() => {
+          training = training.filter((e) => e.id !== itemSelected?.id);
+          closeModal();
+        })
+        .finally(() => {
+          deleteLoading = false;
+        });
     }
   };
 
-  const onCancelDelete = () => {
+  const closeModal = () => {
     showDeleteModal = false;
     itemSelected = undefined;
   };
-
-  $inspect(training);
 </script>
 
 <div class="space-y-3">
@@ -83,7 +86,11 @@
   {/each}
 
   {#if showDeleteModal}
-    <Modal onAccept={onDeleteItem} onCancel={onCancelDelete}>
+    <Modal
+      onAccept={onDeleteItem}
+      onCancel={closeModal}
+      loading={deleteLoading}
+    >
       <p>Are you sure to delete this exercise?</p>
     </Modal>
   {/if}

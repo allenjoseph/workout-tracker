@@ -92,6 +92,14 @@ export async function db_AddTraining(training: Training) {
   return result;
 }
 
+export async function db_DeleteTraining(trainingId: string) {
+  const sql = 'DELETE FROM Training WHERE id = ?';
+  const result = await env.WORKOUT_TRACKER_DB.prepare(sql)
+    .bind(trainingId)
+    .run();
+  return result;
+}
+
 export async function db_GetWorkoutTraining(workoutId: string) {
   const sql =
     'SELECT id, muscle, name, reps, weight, rpe, failure, notes FROM Training WHERE workout = ? ORDER BY timestamp DESC';

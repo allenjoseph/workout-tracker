@@ -45,7 +45,7 @@
 </script>
 
 <form class="flex flex-col gap-4" onsubmit={onSubmitHandler}>
-  <div class="relative">
+  <div class="relative space-y-2">
     <h3 class="font-semibold">Exercise:</h3>
     <div
       class="absolute right-0 top-0 z-10 w-full flex flex-col items-end gap-1"

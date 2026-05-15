@@ -85,11 +85,12 @@
             {/if}
           </div>
           {#if workout}
+            <div class="divider divider-dashed my-2"></div>
             <WorkoutSummary exercises={workout.exercises} />
             {#if today.isSame(workout.timestamp, "day")}
               <button
                 type="button"
-                class="btn btn-sm btn-success self-end"
+                class="btn btn-sm btn-success mt-3"
                 onclick={() => goToWorkout(workout.uuid)}
               >
                 Continue
@@ -97,7 +98,7 @@
             {:else if today.isBefore(workout.timestamp, "day")}
               <button
                 type="button"
-                class="btn btn-sm btn-neutral self-end"
+                class="btn btn-sm btn-neutral mt-3"
                 onclick={() => goToWorkout(workout.uuid)}
               >
                 View
@@ -106,7 +107,7 @@
           {:else if day.isSame(today, "day")}
             <button
               type="button"
-              class="btn btn-sm btn-success self-end"
+              class="btn btn-sm btn-success mt-3"
               onclick={startWorkout}
               disabled={loading}
             >
