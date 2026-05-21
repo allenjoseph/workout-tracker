@@ -12,6 +12,7 @@
   const { onSubmit }: { onSubmit: (training: Training) => void } = $props();
 
   let openNewExercise = $state(false);
+  let loading = $state(false);
 
   let training: Training = $state({
     muscle: store.currentWorkoutMuscle!,
@@ -33,6 +34,7 @@
   const onSubmitHandler = async (e: Event) => {
     e.preventDefault();
     if (!store.currentWorkout || invalid) return;
+    loading = true;
     try {
       const result = await saveTraining(store.currentWorkout, training);
 
@@ -40,6 +42,8 @@
       training.rpe = undefined as never;
     } catch (ex) {
       console.log(ex);
+    } finally {
+      loading = false;
     }
   };
 </script>
@@ -85,7 +89,7 @@
   </div>
   <button
     type="submit"
-    disabled={invalid}
+    disabled={invalid || loading}
     class="btn btn-soft btn-primary dark:btn-success"
   >
     DONE
