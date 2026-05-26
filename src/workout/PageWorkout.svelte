@@ -1,6 +1,7 @@
 <script lang="ts">
   import dayjs from "dayjs";
   import { onMount } from "svelte";
+  import ButtonCollapse from "../common/components/ButtonCollapse.svelte";
   import Layout from "../common/layout/Layout.svelte";
   import type { Training } from "../common/types";
   import { store } from "../store.svelte";
@@ -34,6 +35,7 @@
 
   let loading = $state(false);
   let exercises = $state<Training[]>([]);
+  let showDetails = $state(false);
 
   const onClickMuscle = (e: MouseEvent, muscle: string) => {
     if (!document.startViewTransition) return;
@@ -69,18 +71,23 @@
   onBack={() => (store.currentPage = "home")}
 >
   <div class="card px-4 py-2">
-    <h1 class="capitalize! py-1">
-      {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
-    </h1>
-    <div class="divider divider-dashed my-2"></div>
-    <div class="flex flex-col">
-      {#if loading}
-        <span class="loading loading-spinner"></span>
-      {:else if !exercises?.length}
-        <span>No muscles have been trained yet.</span>
-      {/if}
-      <WorkoutSummary {exercises} deletable />
+    <div class="flex justify-between items-center">
+      <h1 class="capitalize!">
+        {dayjs(store.currentDate).format("dddd, MMMM D, YYYY")}
+      </h1>
+      <ButtonCollapse bind:collapsed={showDetails} />
     </div>
+    {#if showDetails}
+      <div class="divider divider-dashed my-2"></div>
+      <div class="flex flex-col">
+        {#if loading}
+          <span class="loading loading-spinner"></span>
+        {:else if !exercises?.length}
+          <span>No muscles have been trained yet.</span>
+        {/if}
+        <WorkoutSummary {exercises} deletable />
+      </div>
+    {/if}
   </div>
   <h3 class="font-semibold">Select a muscle to train</h3>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">

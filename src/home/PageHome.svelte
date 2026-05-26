@@ -1,6 +1,7 @@
 <script lang="ts">
   import dayjs from "dayjs";
   import { onMount } from "svelte";
+  import ButtonCollapse from "../common/components/ButtonCollapse.svelte";
   import Layout from "../common/layout/Layout.svelte";
   import type { Workout } from "../common/types";
   import { store } from "../store.svelte";
@@ -13,6 +14,7 @@
 
   let loading = $state(false);
   let workouts = $state<Workout[]>([]);
+  let openState = $state<Record<string, boolean>>({});
 
   const goToWorkout = (workoutId: string) => {
     store.currentPage = "workout";
@@ -36,8 +38,6 @@
       .catch(console.log);
     loading = false;
   };
-
-  const toggleCollapse = () => {};
 
   onMount(async () => {
     await getWorkouts();
@@ -72,21 +72,14 @@
               {day.format("dddd, MMMM D, YYYY")}
             </span>
             {#if workout}
-              <button
-                type="button"
-                onclick={toggleCollapse}
-                aria-label="collapse"
-              >
-                <span
-                  class="icon-[boxicons--chevron-down] size-7 rtl:rotate-180"
-                >
-                </span>
-              </button>
+              <ButtonCollapse bind:collapsed={openState[workout.uuid]} />
             {/if}
           </div>
           {#if workout}
-            <div class="divider divider-dashed my-2"></div>
-            <WorkoutSummary exercises={workout.exercises} />
+            {#if openState[workout.uuid]}
+              <div class="divider divider-dashed my-2"></div>
+              <WorkoutSummary exercises={workout.exercises} />
+            {/if}
             {#if today.isSame(workout.timestamp, "day")}
               <button
                 type="button"

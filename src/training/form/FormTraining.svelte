@@ -92,6 +92,10 @@
     disabled={invalid || loading}
     class="btn btn-soft btn-primary dark:btn-success"
   >
-    DONE
+    {#if loading}
+      <span class="loading loading-spinner"></span>
+    {:else}
+      DONE
+    {/if}
   </button>
 </form>

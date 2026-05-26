@@ -145,7 +145,10 @@ export default {
         : new Response('Bad Request', { status: 400 });
     }
 
-    if (url.pathname.startsWith('/private/workouts/training/') && method === 'DELETE') {
+    if (
+      url.pathname.startsWith('/private/workouts/training/') &&
+      method === 'DELETE'
+    ) {
       const trainingId = url.pathname.split('/').at(-1);
       if (trainingId) {
         const result = await db_DeleteTraining(trainingId);
